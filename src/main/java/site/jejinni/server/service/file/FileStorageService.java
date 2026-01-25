@@ -26,18 +26,13 @@ public class FileStorageService {
 
   private final Map<FileType, Path> fileStorageLocations;
 
-  /**
-   * 파일 정보를 담는 내부 클래스
-   */
   public static class FileInfo {
     private final UUID id;
     private final String extension;
-    private final String fileName; // id + extension 조합 (실제 저장된 파일명)
 
     public FileInfo(UUID id, String extension) {
       this.id = id;
       this.extension = extension != null ? extension : "";
-      this.fileName = this.id.toString() + this.extension;
     }
 
     public UUID getId() {
@@ -47,10 +42,6 @@ public class FileStorageService {
     public String getExtension() {
       return extension;
     }
-
-    public String getFileName() {
-      return fileName;
-    }
   }
 
   public FileStorageService(
@@ -59,7 +50,6 @@ public class FileStorageService {
 
     this.fileStorageLocations = new HashMap<>();
 
-    // 이미지 저장 경로 설정
     Path imageLocation = Paths.get(imageUploadDir).toAbsolutePath().normalize();
     try {
       Files.createDirectories(imageLocation);
@@ -68,7 +58,6 @@ public class FileStorageService {
       throw new RuntimeException("이미지 저장 디렉토리를 생성할 수 없습니다: " + imageUploadDir, ex);
     }
 
-    // 문서 저장 경로 설정
     Path documentLocation = Paths.get(documentUploadDir).toAbsolutePath().normalize();
     try {
       Files.createDirectories(documentLocation);
@@ -78,9 +67,6 @@ public class FileStorageService {
     }
   }
 
-  /**
-   * 파일 타입에 따른 저장 경로 가져오기
-   */
   private Path getStorageLocation(FileType fileType) {
     Path location = fileStorageLocations.get(fileType);
     if (location == null) {
@@ -89,13 +75,6 @@ public class FileStorageService {
     return location;
   }
 
-  /**
-   * 파일 업로드 (Create)
-   * 
-   * @param file     업로드할 파일
-   * @param fileType 파일 타입 (IMAGE 또는 DOCUMENT)
-   * @return 파일 정보 (UUID와 extension 분리)
-   */
   public FileInfo storeFile(MultipartFile file, FileType fileType) {
     if (file.isEmpty()) {
       throw new IllegalArgumentException("업로드할 파일이 비어있습니다.");
@@ -109,7 +88,7 @@ public class FileStorageService {
 
     UUID fileId = UUID.randomUUID();
     FileInfo fileInfo = new FileInfo(fileId, fileExtension);
-    String fileName = fileInfo.getFileName();
+    String fileName = fileId.toString() + fileExtension;
 
     try {
       Path storageLocation = getStorageLocation(fileType);
@@ -121,50 +100,8 @@ public class FileStorageService {
     }
   }
 
-  /**
-   * 파일명에서 UUID와 extension 분리
-   * 
-   * @param fileName 파일명 (UUID + extension)
-   * @return 파일 정보
-   */
-  public FileInfo parseFileName(String fileName) {
-    if (fileName == null || fileName.isEmpty()) {
-      throw new IllegalArgumentException("파일명이 비어있습니다.");
-    }
-
-    int lastDotIndex = fileName.lastIndexOf(".");
-    if (lastDotIndex == -1) {
-      // 확장자가 없는 경우
-      return new FileInfo(UUID.fromString(fileName), "");
-    }
-
-    String idString = fileName.substring(0, lastDotIndex);
-    String extension = fileName.substring(lastDotIndex);
-
-    return new FileInfo(UUID.fromString(idString), extension);
-  }
-
-  /**
-   * 파일 다운로드 (Read) - ID와 extension으로 조회
-   * 
-   * @param id        파일 ID (UUID)
-   * @param extension 확장자
-   * @param fileType  파일 타입 (IMAGE 또는 DOCUMENT)
-   * @return 파일 리소스
-   */
   public Resource loadFileAsResource(UUID id, String extension, FileType fileType) {
     String fileName = id.toString() + (extension != null ? extension : "");
-    return loadFileAsResourceByFileName(fileName, fileType);
-  }
-
-  /**
-   * 파일 다운로드 (Read) - 파일명으로 조회 (내부용)
-   * 
-   * @param fileName 파일명
-   * @param fileType 파일 타입 (IMAGE 또는 DOCUMENT)
-   * @return 파일 리소스
-   */
-  private Resource loadFileAsResourceByFileName(String fileName, FileType fileType) {
     try {
       Path storageLocation = getStorageLocation(fileType);
       Path filePath = storageLocation.resolve(fileName).normalize();
@@ -179,65 +116,6 @@ public class FileStorageService {
     }
   }
 
-  /**
-   * 파일 삭제 (Delete) - ID와 extension으로 삭제
-   * 
-   * @param id        파일 ID (UUID)
-   * @param extension 확장자
-   * @param fileType  파일 타입 (IMAGE 또는 DOCUMENT)
-   */
-  public void deleteFile(UUID id, String extension, FileType fileType) {
-    String fileName = id.toString() + (extension != null ? extension : "");
-    deleteFileByFileName(fileName, fileType);
-  }
-
-  /**
-   * 파일 삭제 (Delete) - 파일명으로 삭제 (내부용)
-   * 
-   * @param fileName 파일명
-   * @param fileType 파일 타입 (IMAGE 또는 DOCUMENT)
-   */
-  private void deleteFileByFileName(String fileName, FileType fileType) {
-    try {
-      Path storageLocation = getStorageLocation(fileType);
-      Path filePath = storageLocation.resolve(fileName).normalize();
-      if (!Files.exists(filePath)) {
-        throw new RuntimeException("파일을 찾을 수 없습니다: " + fileName);
-      }
-      Files.deleteIfExists(filePath);
-    } catch (IOException ex) {
-      throw new RuntimeException("파일을 삭제할 수 없습니다: " + fileName, ex);
-    }
-  }
-
-  /**
-   * 파일 업데이트 (Update) - 기존 파일 삭제 후 새 파일 저장
-   * 
-   * @param oldId        기존 파일 ID (UUID)
-   * @param oldExtension 기존 확장자
-   * @param newFile      새 파일
-   * @param fileType     파일 타입 (IMAGE 또는 DOCUMENT)
-   * @return 새로 저장된 파일 정보
-   */
-  public FileInfo updateFile(UUID oldId, String oldExtension, MultipartFile newFile, FileType fileType) {
-    if (newFile.isEmpty()) {
-      throw new IllegalArgumentException("업로드할 파일이 비어있습니다.");
-    }
-
-    if (oldId != null) {
-      deleteFile(oldId, oldExtension, fileType);
-    }
-    return storeFile(newFile, fileType);
-  }
-
-  /**
-   * 파일 존재 여부 확인
-   * 
-   * @param id        파일 ID (UUID)
-   * @param extension 확장자
-   * @param fileType  파일 타입 (IMAGE 또는 DOCUMENT)
-   * @return 파일 존재 여부
-   */
   public boolean fileExists(UUID id, String extension, FileType fileType) {
     try {
       String fileName = id.toString() + (extension != null ? extension : "");
@@ -249,14 +127,6 @@ public class FileStorageService {
     }
   }
 
-  /**
-   * 파일 크기 조회
-   * 
-   * @param id        파일 ID (UUID)
-   * @param extension 확장자
-   * @param fileType  파일 타입 (IMAGE 또는 DOCUMENT)
-   * @return 파일 크기 (bytes)
-   */
   public long getFileSize(UUID id, String extension, FileType fileType) {
     try {
       String fileName = id.toString() + (extension != null ? extension : "");
@@ -268,14 +138,6 @@ public class FileStorageService {
     }
   }
 
-  /**
-   * 파일 생성일 조회
-   * 
-   * @param id        파일 ID (UUID)
-   * @param extension 확장자
-   * @param fileType  파일 타입 (IMAGE 또는 DOCUMENT)
-   * @return 파일 생성일
-   */
   public LocalDateTime getFileCreatedAt(UUID id, String extension, FileType fileType) {
     try {
       String fileName = id.toString() + (extension != null ? extension : "");
@@ -283,7 +145,6 @@ public class FileStorageService {
       Path filePath = storageLocation.resolve(fileName).normalize();
       FileTime creationTime = (FileTime) Files.getAttribute(filePath, "creationTime");
       if (creationTime == null) {
-        // creationTime을 지원하지 않는 파일 시스템의 경우 lastModifiedTime 사용
         creationTime = Files.getLastModifiedTime(filePath);
       }
       return LocalDateTime.ofInstant(creationTime.toInstant(), ZoneId.systemDefault());
@@ -292,14 +153,6 @@ public class FileStorageService {
     }
   }
 
-  /**
-   * 파일 수정일 조회
-   * 
-   * @param id        파일 ID (UUID)
-   * @param extension 확장자
-   * @param fileType  파일 타입 (IMAGE 또는 DOCUMENT)
-   * @return 파일 수정일
-   */
   public LocalDateTime getFileUpdatedAt(UUID id, String extension, FileType fileType) {
     try {
       String fileName = id.toString() + (extension != null ? extension : "");
@@ -312,14 +165,6 @@ public class FileStorageService {
     }
   }
 
-  /**
-   * 파일 리스트 조회
-   * 
-   * @param fileType 파일 타입 (IMAGE 또는 DOCUMENT)
-   * @param page     페이지 번호 (0부터 시작)
-   * @param size     페이지 크기
-   * @return 파일 정보 리스트
-   */
   public List<FileInfo> getFileList(FileType fileType, int page, int size) {
     try {
       Path storageLocation = getStorageLocation(fileType);
@@ -344,10 +189,8 @@ public class FileStorageService {
           Path filePath = sortedPaths.get(i);
           String fileName = filePath.getFileName().toString();
 
-          // UUID와 extension 분리
           int lastDotIndex = fileName.lastIndexOf(".");
           if (lastDotIndex == -1) {
-            // 확장자가 없는 경우
             UUID fileId = UUID.fromString(fileName);
             fileList.add(new FileInfo(fileId, ""));
           } else {
@@ -365,12 +208,6 @@ public class FileStorageService {
     }
   }
 
-  /**
-   * 파일 총 개수 조회
-   * 
-   * @param fileType 파일 타입 (IMAGE 또는 DOCUMENT)
-   * @return 파일 총 개수
-   */
   public long getFileCount(FileType fileType) {
     try {
       Path storageLocation = getStorageLocation(fileType);
@@ -379,6 +216,28 @@ public class FileStorageService {
       }
     } catch (IOException ex) {
       throw new RuntimeException("파일 개수를 조회할 수 없습니다: " + fileType, ex);
+    }
+  }
+
+  public FileInfo updateFile(UUID oldId, String oldExtension, MultipartFile newFile, FileType fileType) {
+    if (newFile.isEmpty()) {
+      throw new IllegalArgumentException("업로드할 파일이 비어있습니다.");
+    }
+
+    if (oldId != null) {
+      deleteFile(oldId, oldExtension, fileType);
+    }
+    return storeFile(newFile, fileType);
+  }
+
+  public void deleteFile(UUID id, String extension, FileType fileType) {
+    try {
+      String fileName = id.toString() + (extension != null ? extension : "");
+      Path storageLocation = getStorageLocation(fileType);
+      Path filePath = storageLocation.resolve(fileName).normalize();
+      Files.deleteIfExists(filePath);
+    } catch (IOException ex) {
+      throw new RuntimeException("파일을 삭제할 수 없습니다: " + id, ex);
     }
   }
 }
