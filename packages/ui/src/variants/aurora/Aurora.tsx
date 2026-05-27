@@ -1,8 +1,12 @@
 import './aurora.scss';
-import { useReveal } from '../../hooks/useReveal';
-import { useMouse } from '../../hooks/useMouse';
+
+import { LINKS, PROFILE } from '../../data/profile';
+
 import type { PortfolioData } from '@jejinni/types';
-import { PROFILE, LINKS } from '../../data/profile';
+import { useMouse } from '../../hooks/useMouse';
+import { useReveal } from '../../hooks/useReveal';
+
+const CARD_ACCENTS = ['#ff3d9a', '#9b5cff', '#3dd0ff', '#ffb84d'];
 
 const TECH_GROUPS_KO: Record<string, string> = {
   언어: '언어',
@@ -32,9 +36,11 @@ const QA_BLOCKS = [
 
 interface Props {
   data: PortfolioData;
+  dark: boolean;
+  onToggleTheme: () => void;
 }
 
-export function AuroraVariant({ data }: Props) {
+export function AuroraVariant({ data, dark, onToggleTheme }: Props) {
   useReveal();
   const m = useMouse();
 
@@ -51,7 +57,7 @@ export function AuroraVariant({ data }: Props) {
   }));
 
   return (
-    <div className="aurora" data-theme="dark" data-density="regular">
+    <div className="aurora" data-theme={dark ? 'dark' : 'light'} data-density="regular">
       {/* Background */}
       <div className="aurora-bg">
         <div className="aurora-blob b1" />
@@ -65,22 +71,33 @@ export function AuroraVariant({ data }: Props) {
       />
 
       {/* NAV */}
-      <nav className="aurora-nav">
-        <div className="aurora-nav-brand">
-          <span className="dot" />
-          <span>{PROFILE.nameKo}</span>
-          <span className="en">{PROFILE.site}</span>
-        </div>
-        <div className="aurora-nav-links">
-          <a href="#about">About</a>
-          <a href="#stack">Stack</a>
-          <a href="#work">Work</a>
-          <a href="#career">Career</a>
-          <a href="#writing">Writing</a>
-          <a href="#contact">Contact</a>
-        </div>
-        <button className="aurora-nav-cta">↓ Resume</button>
-      </nav>
+      <div className="aurora-nav-wrap">
+        <nav className="aurora-nav">
+          <div className="aurora-nav-brand">
+            <span className="dot" />
+            <span>{PROFILE.nameKo}</span>
+            <span className="en">{PROFILE.site}</span>
+          </div>
+          <div className="aurora-nav-links">
+            <a href="#about">About</a>
+            <a href="#stack">Stack</a>
+            <a href="#work">Work</a>
+            <a href="#career">Career</a>
+            <a href="#writing">Writing</a>
+            <a href="#contact">Contact</a>
+          </div>
+          <div className="aurora-nav-actions">
+            <button
+              className="aurora-nav-theme"
+              onClick={onToggleTheme}
+              aria-label={dark ? '라이트 모드로 전환' : '다크 모드로 전환'}
+            >
+              {dark ? '☾' : '☀'}
+            </button>
+            <button className="aurora-nav-cta">↓ Resume</button>
+          </div>
+        </nav>
+      </div>
 
       <main className="aurora-main">
         {/* HERO */}
@@ -97,28 +114,11 @@ export function AuroraVariant({ data }: Props) {
                 <span className="name">{PROFILE.nameKo}</span>입니다.
               </span>
               <span className="en" data-reveal data-delay="4">
-                {PROFILE.nameEn}, building interfaces that feel right.
+                {PROFILE.nameEn},
               </span>
             </h1>
           </div>
 
-          <div className="aurora-hero-bottom">
-            <p className="aurora-hero-sub" data-reveal data-delay="4">
-              {PROFILE.tagline}.
-              디자인 시스템 · 성능 · 마이크로 인터랙션 사이의 균형을 찾는 일을 즐깁니다.
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 24, alignItems: 'flex-start' }}>
-              <div className="aurora-hero-actions" data-reveal data-delay="4">
-                <button className="glass-btn primary">↓ 이력서 다운로드</button>
-                <button className="glass-btn">프로젝트 보기 →</button>
-              </div>
-              <div className="aurora-hero-kpis" data-reveal data-delay="4">
-                <div className="kpi"><div className="k">Based in</div><div className="v">Seoul</div></div>
-                <div className="kpi"><div className="k">Status</div><div className="v ac">Open</div></div>
-                <div className="kpi"><div className="k">Stack</div><div className="v">{skills.skills.length}</div></div>
-              </div>
-            </div>
-          </div>
         </section>
 
         {/* ABOUT */}
@@ -214,25 +214,41 @@ export function AuroraVariant({ data }: Props) {
           </div>
 
           <div className="aurora-projects">
-            {projects.map((p, i) => (
-              <article
-                key={p.id}
-                className="project-card"
-                data-reveal
-                data-delay={Math.min(i + 1, 4) as 1 | 2 | 3 | 4}
-              >
-                <div>
-                  <div className="num">— {String(i + 1).padStart(2, '0')}</div>
-                  <h3 className="title">{p.title}</h3>
-                  <p className="desc">{p.description}</p>
-                </div>
-                <div className="foot">
-                  <div className="stack">
-                    {p.skills.map((s) => <span key={s}>{s}</span>)}
+            {projects.map((p, i) => {
+              const accent = CARD_ACCENTS[i % CARD_ACCENTS.length];
+              const MAX = 3;
+              const showAll = p.skills.length <= MAX + 1;
+              return (
+                <article
+                  key={p.id}
+                  className="project-card"
+                  data-reveal
+                  data-delay={Math.min(i + 1, 4) as 1 | 2 | 3 | 4}
+                  style={{ ['--c' as string]: accent }}
+                >
+                  <div>
+                    <div className="num">{String(i + 1).padStart(2, '0')}</div>
+                    <h3 className="title">{p.title}</h3>
+                    <p className="desc">{p.description}</p>
                   </div>
-                </div>
-              </article>
-            ))}
+                  <div className="foot">
+                    <div className="stack">
+                      {showAll
+                        ? p.skills.map((s) => <span key={s}>{s}</span>)
+                        : (
+                          <>
+                            {p.skills.slice(0, MAX).map((s) => <span key={s}>{s}</span>)}
+                            <span className="more" title={p.skills.slice(MAX).join(', ')}>
+                              +{p.skills.length - MAX}
+                            </span>
+                          </>
+                        )
+                      }
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
 

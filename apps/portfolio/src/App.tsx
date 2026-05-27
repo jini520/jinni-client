@@ -7,16 +7,24 @@ const PROGRESS_ACCENT = 'linear-gradient(90deg, oklch(78% 0.16 320), oklch(82% 0
 
 export default function App() {
   const [data, setData] = useState<PortfolioData | null>(null);
+  const [dark, setDark] = useState(true);
 
   useEffect(() => {
     fetchPortfolioData().then(setData);
+    try {
+      if (localStorage.getItem('aurora-theme') === 'light') setDark(false);
+    } catch {}
   }, []);
+
+  useEffect(() => {
+    try { localStorage.setItem('aurora-theme', dark ? 'dark' : 'light'); } catch {}
+  }, [dark]);
 
   return (
     <>
       <ScrollProgress accent={PROGRESS_ACCENT} />
       {data ? (
-        <AuroraVariant data={data} />
+        <AuroraVariant data={data} dark={dark} onToggleTheme={() => setDark((d) => !d)} />
       ) : (
         <div className="portfolio-loading">Loading…</div>
       )}
