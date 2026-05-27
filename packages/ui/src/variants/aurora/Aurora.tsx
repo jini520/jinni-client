@@ -1,12 +1,14 @@
 import './aurora.scss';
 
 import { LINKS, PROFILE } from '../../data/profile';
+import { getSkillIcon } from './SkillIcons';
 
 import type { PortfolioData } from '@jejinni/types';
 import { useMouse } from '../../hooks/useMouse';
 import { useReveal } from '../../hooks/useReveal';
 
 const CARD_ACCENTS = ['#ff3d9a', '#9b5cff', '#3dd0ff', '#ffb84d'];
+
 
 const TECH_GROUPS_KO: Record<string, string> = {
   언어: '언어',
@@ -188,7 +190,12 @@ export function AuroraVariant({ data, dark, onToggleTheme }: Props) {
                           style={{ ['--chip-accent' as string]: `oklch(72% 0.16 ${hue})` }}
                         >
                           <span className="sq">
-                            {skill.name.slice(0, 2).toUpperCase()}
+                            {(() => {
+                              const Icon = getSkillIcon(skill.name);
+                              return Icon
+                                ? <Icon width={16} height={16} />
+                                : skill.name.slice(0, 2).toUpperCase();
+                            })()}
                           </span>
                           {skill.name}
                         </span>

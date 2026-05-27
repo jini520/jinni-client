@@ -144,6 +144,14 @@
 .aurora[data-density='regular'] { --gx: 32px; --gy: 96px;  --hero-py: 140px; }
 .aurora[data-density='comfy']   { --gx: 48px; --gy: 140px; --hero-py: 200px; }
 
+@media (max-width: 480px) {
+  .aurora[data-density='regular'] {
+    --gx: 20px;
+    --gy: 56px;
+    --hero-py: 72px;
+  }
+}
+
 // ── NAV ────────────────────────────────────────────────────────────────────
 .aurora-nav-wrap {
   position: sticky;
@@ -159,8 +167,14 @@
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 16px;
-  padding: 10px 12px 10px 18px;
+  padding: 10px 16px;
   background: rgba(11, 10, 20, 0.45);
+
+  @media (max-width: 760px) {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 14px;
+  }
   border: 1px solid var(--line-2);
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
@@ -231,6 +245,11 @@
   transition: transform 0.25s;
 
   &:hover { transform: translateY(-1px); }
+
+  @media (max-width: 480px) {
+    font-size: 11.5px;
+    padding: 6px 12px;
+  }
 }
 
 .aurora-nav-actions {
@@ -244,7 +263,7 @@
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  background: var(--surface-2);
+  background: var(--surface-3);
   border: 1px solid var(--line-2);
   color: var(--fg);
   cursor: pointer;
@@ -315,7 +334,7 @@
 
   .ln1, .ln2 {
     display: block;
-    font-size: 0.42em;
+    font-size: 0.46em;
     font-weight: 500;
     letter-spacing: -0.01em;
     color: var(--fg-dim);
@@ -351,7 +370,7 @@
 
   .en {
     display: block;
-    margin-top: 24px;
+    margin-top: 36px;
     font-family: var(--f-mono);
     font-weight: 400;
     font-size: clamp(13px, 1.2vw, 15.5px);
@@ -385,6 +404,7 @@
   @media (max-width: 760px) {
     grid-template-columns: 1fr;
     gap: 16px;
+    margin-bottom: 32px;
   }
 }
 
@@ -429,6 +449,9 @@
   display: flex;
   flex-direction: column;
   gap: clamp(48px, 7vw, 80px);
+  padding: 0 0 0 clamp(16px, 3vw, 40px);
+
+  @media (max-width: 760px) { padding-left: 12px; }
 }
 
 .qa-block {
@@ -578,7 +601,7 @@
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  padding: 8px 13px 8px 9px;
+  padding: 7px 13px 7px 7px;
   border-radius: 10px;
   background: var(--surface-2);
   border: 1px solid var(--line);
@@ -594,10 +617,11 @@
   }
 
   .sq {
-    width: 22px;
-    height: 22px;
-    border-radius: 6px;
-    background: var(--chip-accent);
+    width: 26px;
+    height: 26px;
+    border-radius: 5px;
+    overflow: hidden;
+    background: transparent;
     color: #fff;
     font-weight: 700;
     font-size: 10px;
@@ -605,6 +629,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+
+    // 텍스트 폴백일 때만 배경색 적용
+    &:not(:has(svg)) {
+      background: var(--chip-accent);
+    }
+
+    svg {
+      width: 26px;
+      height: 26px;
+    }
   }
 }
 
@@ -818,6 +853,8 @@
     grid-template-columns: 1fr;
     gap: 4px;
     padding: 16px 18px;
+
+    .ptag { width: fit-content; }
   }
 
   .date { font-family: var(--f-mono); font-size: 11px; color: var(--fg-faint); letter-spacing: 0.04em; }
