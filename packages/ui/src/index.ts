@@ -1,21 +1,27 @@
-// @jejinni/ui — Shared portfolio UI
+// ── Atoms ────────────────────────────────────────────────────────────────────
+export * from './atoms/Button';
+export * from './atoms/Tag';
+export * from './atoms/Badge';
+export * from './atoms/Icon';
+export * from './atoms/Pill';
 
-// ── Variants ────────────────────────────────────────────────────────────────
-export { AuroraVariant } from './variants/aurora/Aurora';
-export { ProjectModal } from './variants/aurora/ProjectModal';
-
-// ── Components ──────────────────────────────────────────────────────────────
-export { ScrollProgress } from './components/ScrollProgress';
-export { MarkdownRenderer } from './components/MarkdownRenderer';
-
-// ── Hooks ───────────────────────────────────────────────────────────────────
-export { useReveal } from './hooks/useReveal';
-export { useMouse } from './hooks/useMouse';
+// ── Hooks ────────────────────────────────────────────────────────────────────
+export { useReveal }         from './hooks/useReveal';
+export { useMouse }          from './hooks/useMouse';
 export { useScrollProgress } from './hooks/useScrollProgress';
 
 // ── Utils ────────────────────────────────────────────────────────────────────
 export { formatPeriod, calcMonths, STATUS_LABELS } from './utils/project';
 
-// ── Data ────────────────────────────────────────────────────────────────────
+// ── Data ─────────────────────────────────────────────────────────────────────
 export { PROFILE, LINKS } from './data/profile';
 export type { ContactLink } from './data/profile';
+
+// ── Legacy (deprecated) ──────────────────────────────────────────────────────
+/** @deprecated use organisms/ProgressBar instead */
+export { ScrollProgress } from './components/ScrollProgress';
+/** @deprecated use organisms/Modal instead */
+export { ProjectModal } from './variants/aurora/ProjectModal';
+/** @deprecated use Theme instead */
+export { AuroraVariant } from './variants/aurora/Aurora';
+export { MarkdownRenderer } from './components/MarkdownRenderer';
