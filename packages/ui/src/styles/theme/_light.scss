@@ -1,0 +1,37 @@
+@use '../tokens/colors' as c;
+@use '../tokens/typography' as t;
+
+// :root.light 또는 [data-theme='light'] 에서 사용
+// 직접 사용 금지 — theme/index.scss 경유
+
+$theme-light: (
+  // Background
+  --color-bg:               #{c.$color-bg-light},
+  --color-bg-secondary:     #{c.$color-gray-50},
+
+  // Text
+  --color-text:             #{c.$color-gray-950},
+  --color-text-subtle:      #{c.$color-gray-500},
+  --color-text-faint:       #{c.$color-gray-400},
+
+  // Border
+  --color-border:           #{c.$color-gray-300},
+  --color-border-strong:    #{c.$color-gray-200},
+
+  // Accent
+  --color-accent:           #{c.$color-blue-500},
+
+  // System colors
+  --color-red:              #{c.$color-red-500},
+  --color-orange:           #{c.$color-orange-500},
+  --color-yellow:           #{c.$color-yellow-500},
+  --color-green:            #{c.$color-green-500},
+  --color-mint:             #{c.$color-mint-500},
+  --color-teal:             #{c.$color-teal-500},
+  --color-cyan:             #{c.$color-cyan-500},
+  --color-blue:             #{c.$color-blue-500},
+  --color-indigo:           #{c.$color-indigo-500},
+  --color-purple:           #{c.$color-purple-500},
+  --color-pink:             #{c.$color-pink-500},
+  --color-brown:            #{c.$color-brown-500},
+);
