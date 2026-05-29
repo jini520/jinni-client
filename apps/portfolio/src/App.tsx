@@ -43,8 +43,11 @@ function AppContent() {
 
   useEffect(() => {
     // 새로고침 전 스크롤 위치 저장
+    // iOS Safari는 beforeunload 미발화 → pagehide 사용
     const saveScroll = () => sessionStorage.setItem('scrollY', String(window.scrollY));
-    window.addEventListener('beforeunload', saveScroll);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    const saveEvent = isSafari ? 'pagehide' : 'beforeunload';
+    window.addEventListener(saveEvent, saveScroll);
 
     const [dataPromise, timerPromise] = [
       fetchPortfolioData(),
@@ -63,7 +66,7 @@ function AppContent() {
       if (localStorage.getItem('aurora-theme') === 'light') setDark(false);
     } catch {}
 
-    return () => window.removeEventListener('beforeunload', saveScroll);
+    return () => window.removeEventListener(saveEvent, saveScroll);
   }, []);
 
   useEffect(() => {
