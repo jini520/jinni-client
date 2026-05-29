@@ -28,6 +28,10 @@ export { formatPeriod, calcMonths, STATUS_LABELS } from './utils/project';
 export { PROFILE, LINKS } from './data/profile';
 export type { ContactLink } from './data/profile';
 
+// ── Theme ──────────────────────────────────────────────────────────────────────
+export { Theme } from './theme/Theme';
+export type { ThemeProps } from './theme/Theme';
+
 // ── Legacy (deprecated) ──────────────────────────────────────────────────────
 /** @deprecated use organisms/ProgressBar instead */
 export { ScrollProgress } from './components/ScrollProgress';
