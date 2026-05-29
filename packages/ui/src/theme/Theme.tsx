@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 
 import { LINKS, PROFILE } from '../data/profile';
-import { getSkillIcon } from '../variants/aurora/SkillIcons';
+import { getSkillIcon } from './SkillIcons';
 
 import type { PortfolioData } from '@jinni/types';
 import { useMouse } from '../hooks/useMouse';

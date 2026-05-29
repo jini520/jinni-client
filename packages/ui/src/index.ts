@@ -15,6 +15,10 @@ export * from './organisms/Card';
 export * from './organisms/Modal';
 export * from './organisms/IconGrid';
 export * from './organisms/ProgressBar';
+export { ProjectModal } from './organisms/ProjectModal';
+
+// ── Theme ────────────────────────────────────────────────────────────────────
+export * from './theme';
 
 // ── Hooks ────────────────────────────────────────────────────────────────────
 export { useReveal }         from './hooks/useReveal';
@@ -28,15 +32,5 @@ export { formatPeriod, calcMonths, STATUS_LABELS } from './utils/project';
 export { PROFILE, LINKS } from './data/profile';
 export type { ContactLink } from './data/profile';
 
-// ── Theme ──────────────────────────────────────────────────────────────────────
-export { Theme } from './theme/Theme';
-export type { ThemeProps } from './theme/Theme';
-
-// ── Legacy (deprecated) ──────────────────────────────────────────────────────
-/** @deprecated use organisms/ProgressBar instead */
-export { ScrollProgress } from './components/ScrollProgress';
-/** @deprecated use organisms/Modal instead */
-export { ProjectModal } from './variants/aurora/ProjectModal';
-/** @deprecated use Theme instead */
-export { AuroraVariant } from './variants/aurora/Aurora';
+// ── Misc ─────────────────────────────────────────────────────────────────────
 export { MarkdownRenderer } from './components/MarkdownRenderer';

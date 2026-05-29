@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import type { ProjectDetail } from '@jejinni/types';
-import { MarkdownRenderer } from '../../components/MarkdownRenderer';
-import { STATUS_LABELS, formatPeriod, calcMonths } from '../../utils/project';
+import type { ProjectDetail } from '@jinni/types';
+import { MarkdownRenderer } from '../components/MarkdownRenderer';
+import { STATUS_LABELS, formatPeriod, calcMonths } from '../utils/project';
 
 interface Props {
   project: ProjectDetail;
