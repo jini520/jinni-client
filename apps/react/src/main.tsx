@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import '@jinni/ui/styles/index.scss';
+import '@jinni/ui/styles';
 import './styles/global.scss';
 import App from './App';
 

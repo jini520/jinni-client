@@ -1,7 +1,5 @@
-import React from "react";
-import ProjectDetail from "@/app/(sections)/ProjectsSection/ProjectDetail/ProjectDetail";
-import BackButton from "@/app/_components/BackButton/BackButton";
-import "./page.scss";
+import { fetchProjectDetail } from "@/lib/portfolio";
+import { ProjectModalClient } from "@/app/_components/ProjectModalClient";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -9,15 +7,11 @@ interface Props {
 
 const ProjectPage = async ({ params }: Props) => {
   const { id } = await params;
+  const project = await fetchProjectDetail(id);
 
-  return (
-    <div className="project__page-container">
-      <ProjectDetail id={id} />
-      <div className="flex items-center justify-center mt-12">
-        <BackButton>홈으로 돌아가기</BackButton>
-      </div>
-    </div>
-  );
+  if (!project) return <div>Project not found</div>;
+
+  return <ProjectModalClient project={project} />;
 };
 
 export default ProjectPage;

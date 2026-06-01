@@ -2,6 +2,7 @@ import type {
   Skills,
   Careers,
   Project,
+  ProjectDetail,
   ApiResponse,
   PageResponse,
   PortfolioData,
@@ -35,6 +36,10 @@ async function fetchCareers(): Promise<Careers> {
 async function fetchProjects(): Promise<Project[]> {
   const data = await apiFetch<PageResponse<Project>>('/api/projects?page=0&size=20');
   return data?.items ?? [];
+}
+
+export async function fetchProjectDetail(id: string): Promise<ProjectDetail | undefined> {
+  return apiFetch<ProjectDetail>(`/api/projects/${id}`);
 }
 
 export async function fetchPortfolioData(): Promise<PortfolioData> {

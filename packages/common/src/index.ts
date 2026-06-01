@@ -15,6 +15,9 @@ export { ContactSection } from './sections/Contact/ContactSection';
 export { Footer } from './sections/Footer/Footer';
 export { PortfolioNav } from './sections/Nav/PortfolioNav';
 
+// ── Project ────────────────────────────────────────────────────────────────
+export { ProjectModal } from './project/ProjectModal';
+
 // ── Composition ──────────────────────────────────────────────────────────────
 export { PortfolioPage } from './PortfolioPage';
 export type { PortfolioPageProps } from './PortfolioPage';

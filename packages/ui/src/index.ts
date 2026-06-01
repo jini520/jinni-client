@@ -1,3 +1,5 @@
+/// <reference path="./types/css-modules.d.ts" />
+
 // ── Atoms ────────────────────────────────────────────────────────────────────
 export * from './atoms/Button';
 export * from './atoms/Tag';
@@ -15,7 +17,6 @@ export * from './organisms/Card';
 export * from './organisms/Modal';
 export * from './organisms/IconGrid';
 export * from './organisms/ProgressBar';
-export { ProjectModal } from './organisms/ProjectModal';
 
 // ── Theme ────────────────────────────────────────────────────────────────────
 export * from './theme';

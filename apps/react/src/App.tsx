@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate, useParams, useLocation } from 'react-router-dom';
 import type { PortfolioData, ProjectDetail } from '@jinni/types';
 import { fetchPortfolioData, fetchProjectDetail } from './data';
-import { Theme, ThemeProvider, useTheme, ProjectModal } from '@jinni/ui';
-import { PortfolioPage } from '@jinni/common';
+import { Theme, ThemeProvider, useTheme } from '@jinni/ui';
+import { PortfolioPage, ProjectModal } from '@jinni/common';
 
 // ── 모달 라우트 ────────────────────────────────────────────────────────────
 function ProjectModalRoute() {

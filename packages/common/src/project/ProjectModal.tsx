@@ -1,8 +1,10 @@
+'use client';
+
 import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import type { ProjectDetail } from '@jinni/types';
-import { MarkdownRenderer } from '../components/MarkdownRenderer';
-import { STATUS_LABELS, formatPeriod, calcMonths } from '../utils/project';
+import { MarkdownRenderer, STATUS_LABELS, formatPeriod, calcMonths } from '@jinni/ui';
+import styles from './project-detail.module.scss';
 
 interface Props {
   project: ProjectDetail;
@@ -35,30 +37,30 @@ export function ProjectModal({ project: p, accent, dark, idx, onClose }: Props) 
 
   return ReactDOM.createPortal(
     <div
-      className="proj-overlay"
+      className={styles.overlay}
       data-theme={dark ? 'dark' : 'light'}
       onClick={onClose}
     >
-      <div className="proj-overlay-inner">
+      <div className={styles.inner}>
         <div
-          className="proj-modal"
+          className={styles.modal}
           style={{ ['--c' as string]: accent }}
           onClick={(e) => e.stopPropagation()}
         >
           {/* 닫기 버튼 — sticky */}
-          <div className="proj-modal-close-row">
-            <button className="proj-modal-close" onClick={onClose} aria-label="닫기">✕</button>
+          <div className={styles.closeRow}>
+            <button className={styles.close} onClick={onClose} aria-label="닫기">✕</button>
           </div>
 
           {/* HEAD */}
-          <div className="proj-modal-head">
-            <div className="num">PROJECT — {idx}</div>
-            <div className="title">{p.title}</div>
-            <div className="sub">{p.description}</div>
-            <div className="tags">
+          <div className={styles.head}>
+            <div className={styles.num}>PROJECT — {idx}</div>
+            <div className={styles.title}>{p.title}</div>
+            <div className={styles.sub}>{p.description}</div>
+            <div className={styles.tags}>
               {p.status && (
-                <span className="pill">
-                  <span className="dot" />
+                <span className={styles.pill}>
+                  <span className={styles.dot} />
                   {STATUS_LABELS[p.status]}
                 </span>
               )}
@@ -66,14 +68,14 @@ export function ProjectModal({ project: p, accent, dark, idx, onClose }: Props) 
           </div>
 
           {/* BODY */}
-          <div className="proj-modal-body">
+          <div className={styles.body}>
             {/* 메타 */}
             {metaCells.length > 0 && (
-              <div className="proj-meta" style={{ gridTemplateColumns: `repeat(${metaCells.length}, 1fr)` }}>
+              <div className={styles.meta} style={{ gridTemplateColumns: `repeat(${metaCells.length}, 1fr)` }}>
                 {metaCells.map(({ k, v }) => (
-                  <div key={k} className="proj-meta-cell">
-                    <div className="k">{k}</div>
-                    <div className="v">{v}</div>
+                  <div key={k} className={styles.metaCell}>
+                    <div className={styles.k}>{k}</div>
+                    <div className={styles.v}>{v}</div>
                   </div>
                 ))}
               </div>
@@ -81,23 +83,23 @@ export function ProjectModal({ project: p, accent, dark, idx, onClose }: Props) 
 
             {/* 개요 */}
             {p.overview && (
-              <div className="proj-block">
-                <div className="proj-block-label">개요</div>
-                <div className="proj-block-body"><p>{p.overview}</p></div>
+              <div className={styles.block}>
+                <div className={styles.blockLabel}>개요</div>
+                <div className={styles.blockBody}><p>{p.overview}</p></div>
               </div>
             )}
 
             {/* 주요 기능 */}
             {p.features && p.features.length > 0 && (
-              <div className="proj-block">
-                <div className="proj-block-label">주요 기능</div>
-                <div className="proj-features">
+              <div className={styles.block}>
+                <div className={styles.blockLabel}>주요 기능</div>
+                <div className={styles.features}>
                   {p.features.map((f, i) => (
-                    <div key={i} className="proj-feature">
-                      <span className="n">{String(i + 1).padStart(2, '0')}</span>
-                      <div className="body">
-                        <div className="ttl">{f.name}</div>
-                        <div className="note">{f.note}</div>
+                    <div key={i} className={styles.feature}>
+                      <span className={styles.n}>{String(i + 1).padStart(2, '0')}</span>
+                      <div className={styles.featureBody}>
+                        <div className={styles.ttl}>{f.name}</div>
+                        <div className={styles.note}>{f.note}</div>
                       </div>
                     </div>
                   ))}
@@ -107,9 +109,9 @@ export function ProjectModal({ project: p, accent, dark, idx, onClose }: Props) 
 
             {/* 구현 포인트 */}
             {p.highlights && p.highlights.length > 0 && (
-              <div className="proj-block">
-                <div className="proj-block-label">구현 포인트</div>
-                <div className="proj-block-body">
+              <div className={styles.block}>
+                <div className={styles.blockLabel}>구현 포인트</div>
+                <div className={styles.blockBody}>
                   <ul>{p.highlights.map((h, i) => <li key={i}>{h}</li>)}</ul>
                 </div>
               </div>
@@ -117,38 +119,38 @@ export function ProjectModal({ project: p, accent, dark, idx, onClose }: Props) 
 
             {/* 담당 역할 */}
             {p.responsibilities && p.responsibilities.length > 0 && (
-              <div className="proj-block">
-                <div className="proj-block-label">담당 역할</div>
-                <div className="proj-block-body">
+              <div className={styles.block}>
+                <div className={styles.blockLabel}>담당 역할</div>
+                <div className={styles.blockBody}>
                   <ul>{p.responsibilities.map((r, i) => <li key={i}>{r}</li>)}</ul>
                 </div>
               </div>
             )}
 
             {/* Stack */}
-            <div className="proj-block">
-              <div className="proj-block-label">Stack</div>
-              <div className="proj-stack-chips">
-                {p.skills.map((s) => <span key={s} className="proj-stack-chip">{s}</span>)}
+            <div className={styles.block}>
+              <div className={styles.blockLabel}>Stack</div>
+              <div className={styles.stackChips}>
+                {p.skills.map((s) => <span key={s} className={styles.stackChip}>{s}</span>)}
               </div>
             </div>
 
             {/* 세부 내용 */}
             {p.contents && (
-              <div className="proj-block proj-block--contents">
-                <div className="proj-block-label">세부 내용</div>
-                <MarkdownRenderer markdown={p.contents} className="proj-markdown" />
+              <div className={`${styles.block} ${styles.blockContents}`}>
+                <div className={styles.blockLabel}>세부 내용</div>
+                <MarkdownRenderer markdown={p.contents} className={styles.markdown} />
               </div>
             )}
           </div>
 
           {/* FOOT */}
           {p.links && p.links.length > 0 && (
-            <div className="proj-modal-foot">
+            <div className={styles.foot}>
               {p.links.map((l, i) => (
                 <a
                   key={l.label}
-                  className={`proj-link${i === 0 ? ' primary' : ''}`}
+                  className={`${styles.link}${i === 0 ? ` ${styles.linkPrimary}` : ''}`}
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
