@@ -8,7 +8,9 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./styles/*": "./src/styles/*"
+    "./styles": "./src/styles/index.scss",
+    "./styles/*": "./src/styles/*",
+    "./scss/*": "./src/styles/*"
   },
   "dependencies": {
     "@jinni/types": "workspace:*",

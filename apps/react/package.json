@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@jinni/common": "workspace:*",
     "@jinni/types": "workspace:*",
     "@jinni/ui": "workspace:*",
     "react": "^19.1.0",

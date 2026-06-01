@@ -28,9 +28,5 @@ export { useScrollProgress } from './hooks/useScrollProgress';
 // ── Utils ────────────────────────────────────────────────────────────────────
 export { formatPeriod, calcMonths, STATUS_LABELS } from './utils/project';
 
-// ── Data ─────────────────────────────────────────────────────────────────────
-export { PROFILE, LINKS } from './data/profile';
-export type { ContactLink } from './data/profile';
-
 // ── Misc ─────────────────────────────────────────────────────────────────────
 export { MarkdownRenderer } from './components/MarkdownRenderer';

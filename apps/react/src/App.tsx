@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate, useParams, useLocation } from 'react-router-dom';
 import type { PortfolioData, ProjectDetail } from '@jinni/types';
 import { fetchPortfolioData, fetchProjectDetail } from './data';
-import { Theme, ProjectModal } from '@jinni/ui';
+import { Theme, ThemeProvider, useTheme, ProjectModal } from '@jinni/ui';
+import { PortfolioPage } from '@jinni/common';
 
 // ── 모달 라우트 ────────────────────────────────────────────────────────────
-interface ModalRouteProps { dark: boolean }
-
-function ProjectModalRoute({ dark }: ModalRouteProps) {
+function ProjectModalRoute() {
+  const { dark } = useTheme();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { state } = useLocation() as { state: { accent?: string; idx?: string } | null };
@@ -36,7 +36,6 @@ function ProjectModalRoute({ dark }: ModalRouteProps) {
 // ── 메인 앱 ───────────────────────────────────────────────────────────────
 function AppContent() {
   const [data, setData] = useState<PortfolioData | null>(null);
-  const [dark, setDark] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -60,36 +59,29 @@ function AppContent() {
         sessionStorage.removeItem('scrollY');
       }
     });
-    try {
-      if (localStorage.getItem('theme') === 'light') setDark(false);
-    } catch {}
 
     return () => window.removeEventListener(saveEvent, saveScroll);
   }, []);
 
-  useEffect(() => {
-    try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch {}
-  }, [dark]);
-
   return (
-    <>
-      {!data && <div className="portfolio-loading" />}
-      {data && (
-        <Theme
-          data={data}
-          dark={dark}
-          onToggleTheme={() => setDark((d) => !d)}
-          onProjectClick={(id, accent, idx) =>
-            navigate(`/projects/${id}`, { state: { accent, idx } })
-          }
-          renderLink={(href, children) => <a href={href}>{children}</a>}
-        />
-      )}
+    <ThemeProvider>
+      <Theme>
+        {!data && <div className="portfolio-loading" />}
+        {data && (
+          <PortfolioPage
+            data={data}
+            onProjectClick={(id, accent, idx) =>
+              navigate(`/projects/${id}`, { state: { accent, idx } })
+            }
+            renderLink={(href, children) => <a href={href}>{children}</a>}
+          />
+        )}
+      </Theme>
       <Routes>
-        <Route path="/projects/:id" element={<ProjectModalRoute dark={dark} />} />
+        <Route path="/projects/:id" element={<ProjectModalRoute />} />
         <Route path="*" element={null} />
       </Routes>
-    </>
+    </ThemeProvider>
   );
 }
 

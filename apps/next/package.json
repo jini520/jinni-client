@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@jinni/common": "workspace:*",
     "@jinni/types": "workspace:*",
     "@jinni/ui": "workspace:*",
     "@tanstack/react-query": "^5.90.2",
