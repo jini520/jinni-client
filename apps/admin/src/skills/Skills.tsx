@@ -78,12 +78,16 @@ const SkillCard = ({
       ref={setNodeRef}
       style={style}
       className={`${styles.card} ${isDragging ? styles.cardDragging : ""}`}
-      {...attributes}
-      {...listeners}
     >
-      <span className={styles.cardGrip}>
+      <button
+        type="button"
+        className={styles.cardGrip}
+        aria-label="드래그하여 순서 변경"
+        {...attributes}
+        {...listeners}
+      >
         <GripIcon />
-      </span>
+      </button>
       <span className={styles.skillName}>{skill.name}</span>
       <div className={styles.cardActions}>
         <button

@@ -44,39 +44,48 @@ export function SortableCard({
       style={style}
       className={`${styles.card} ${isDragging ? styles.dragging : ""}`}
     >
-      <div className={styles.header}>
-        <div className={styles.handleArea} {...attributes} {...listeners}>
-          <span className={styles.handle}>
-            <GripIcon />
-          </span>
-          <span className={styles.title}>{title}</span>
-          {aside && <span className={styles.aside}>{aside}</span>}
+      <button
+        type="button"
+        className={styles.handle}
+        aria-label="드래그하여 순서 변경"
+        {...attributes}
+        {...listeners}
+      >
+        <GripIcon />
+      </button>
+
+      <div className={styles.main}>
+        <div className={styles.header}>
+          <div className={styles.titleWrap}>
+            <span className={styles.title}>{title}</span>
+            {aside && <span className={styles.aside}>{aside}</span>}
+          </div>
+
+          <div className={styles.actions}>
+            {actions ?? (
+              <>
+                {onEdit && (
+                  <Button variant="ghost" size="sm" onClick={onEdit}>
+                    수정
+                  </Button>
+                )}
+                {onDelete && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className={styles.danger}
+                    onClick={onDelete}
+                  >
+                    삭제
+                  </Button>
+                )}
+              </>
+            )}
+          </div>
         </div>
 
-        <div className={styles.actions}>
-          {actions ?? (
-            <>
-              {onEdit && (
-                <Button variant="ghost" size="sm" onClick={onEdit}>
-                  수정
-                </Button>
-              )}
-              {onDelete && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={styles.danger}
-                  onClick={onDelete}
-                >
-                  삭제
-                </Button>
-              )}
-            </>
-          )}
-        </div>
+        {children && <div className={styles.body}>{children}</div>}
       </div>
-
-      {children && <div className={styles.body}>{children}</div>}
     </div>
   );
 }

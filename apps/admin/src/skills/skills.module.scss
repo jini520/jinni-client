@@ -135,15 +135,10 @@
   border: 1px solid var(--color-border);
   border-radius: 10px;
   background: var(--color-bg);
-  cursor: grab;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
   &:hover {
     border-color: var(--color-border-strong);
-  }
-
-  &:active {
-    cursor: grabbing;
   }
 }
 
@@ -158,13 +153,33 @@
 }
 
 .cardGrip {
+  align-self: stretch;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
   flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
   color: var(--color-text-faint);
+  cursor: grab;
+  touch-action: none;
+  transition: color 0.15s ease, background 0.15s ease;
 
   svg {
-    width: 15px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    color: var(--color-accent);
+    background: var(--color-bg-secondary);
+  }
+
+  &:active {
+    cursor: grabbing;
   }
 }
 
