@@ -2,6 +2,7 @@ export { Page, PageHeader, Toolbar } from "./Page";
 export { ErrorBanner, Spinner, EmptyState } from "./Feedback";
 export { Form, FormField, FormRow, FormActions } from "./Form";
 export { Modal } from "./Modal";
+export { Tabs } from "./Tabs";
 export { SortableCard } from "./SortableCard";
 export {
   UploadArea,

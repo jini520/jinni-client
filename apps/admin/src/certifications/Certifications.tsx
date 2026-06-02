@@ -34,6 +34,7 @@ import {
   EmptyState,
   SortableCard,
   Modal,
+  Tabs,
   Form,
   FormField,
   FormRow,
@@ -382,20 +383,14 @@ const Certifications = () => {
       <ErrorBanner message={error} />
 
       {/* 탭 */}
-      <div className={styles.tabs}>
-        <button
-          className={`${styles.tab} ${isCert ? styles.active : ""}`}
-          onClick={() => setActiveTab("certifications")}
-        >
-          자격증 ({certificationList.length})
-        </button>
-        <button
-          className={`${styles.tab} ${!isCert ? styles.active : ""}`}
-          onClick={() => setActiveTab("awards")}
-        >
-          수상 내역 ({awardList.length})
-        </button>
-      </div>
+      <Tabs
+        active={activeTab}
+        onChange={setActiveTab}
+        tabs={[
+          { key: "certifications", label: `자격증 (${certificationList.length})` },
+          { key: "awards", label: `수상 내역 (${awardList.length})` },
+        ]}
+      />
 
       {loading ? (
         <Spinner />

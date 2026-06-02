@@ -23,111 +23,23 @@ import type {
   BusinessRequestDto,
   CareerProjectRequestDto,
 } from "../@types";
-import "./Careers.css";
-
-// 드래그 가능한 Business 아이템 컴포넌트
-interface SortableBusinessItemProps {
-  business: BusinessDto;
-  onEdit: (business: BusinessDto) => void;
-  onDelete: (id: string) => void;
-  formatPeriod: (startDate?: string, endDate?: string) => string;
-}
-
-const SortableBusinessItem = ({
-  business,
-  onEdit,
-  onDelete,
-  formatPeriod,
-}: SortableBusinessItemProps) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: business.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={`career-card ${isDragging ? "dragging" : ""}`}
-    >
-      <div className="career-card-header">
-        <div className="career-main-info" {...attributes} {...listeners}>
-          <span className="drag-handle">⋮⋮</span>
-          <h3 className="company-name">{business.company}</h3>
-          <span className="period">
-            {formatPeriod(business.startDate, business.endDate)}
-          </span>
-        </div>
-        <div className="career-actions">
-          <button
-            className="btn-edit"
-            onClick={(e) => {
-              e.stopPropagation();
-              onEdit(business);
-            }}
-          >
-            수정
-          </button>
-          <button
-            className="btn-delete"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(business.id);
-            }}
-          >
-            삭제
-          </button>
-        </div>
-      </div>
-
-      <div className="career-card-body">
-        <div className="career-meta">
-          {business.department && (
-            <span className="meta-item">
-              <strong>부서:</strong> {business.department}
-            </span>
-          )}
-          {business.position && (
-            <span className="meta-item">
-              <strong>직책:</strong> {business.position}
-            </span>
-          )}
-        </div>
-
-        {business.skills && business.skills.length > 0 && (
-          <div className="career-skills">
-            {business.skills.map((skill, index) => (
-              <span key={index} className="skill-tag">
-                {skill}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {business.details && business.details.length > 0 && (
-          <div className="career-details">
-            <strong>업무 내용:</strong>
-            <ul>
-              {business.details.map((detail, index) => (
-                <li key={index}>{detail}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+import {
+  Page,
+  PageHeader,
+  Toolbar,
+  Tabs,
+  ErrorBanner,
+  Spinner,
+  EmptyState,
+  SortableCard,
+  Modal,
+  Form,
+  FormField,
+  FormRow,
+  FormActions,
+  Button,
+} from "../components";
+import styles from "./careers.module.scss";
 
 // 드래그 가능한 스킬 태그 컴포넌트
 interface SortableSkillTagProps {
@@ -153,112 +65,15 @@ const SortableSkillTag = ({ id, skill, onRemove }: SortableSkillTagProps) => {
   };
 
   return (
-    <span
-      ref={setNodeRef}
-      style={style}
-      className={`tag ${isDragging ? "dragging" : ""}`}
-    >
-      <span className="drag-handle-small" {...attributes} {...listeners}>
+    <span ref={setNodeRef} style={style} className={styles.tag}>
+      <span className={styles.tagHandle} {...attributes} {...listeners}>
         ⋮⋮
       </span>
       {skill}
-      <button type="button" className="tag-remove" onClick={onRemove}>
+      <button type="button" className={styles.tagRemove} onClick={onRemove}>
         ×
       </button>
     </span>
-  );
-};
-
-// 드래그 가능한 Career Project 아이템 컴포넌트
-interface SortableCareerProjectItemProps {
-  project: CareerProjectDto;
-  onEdit: (project: CareerProjectDto) => void;
-  onDelete: (id: string) => void;
-  formatPeriod: (startDate?: string, endDate?: string) => string;
-}
-
-const SortableCareerProjectItem = ({
-  project,
-  onEdit,
-  onDelete,
-  formatPeriod,
-}: SortableCareerProjectItemProps) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: project.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={`career-card ${isDragging ? "dragging" : ""}`}
-    >
-      <div className="career-card-header">
-        <div className="career-main-info" {...attributes} {...listeners}>
-          <span className="drag-handle">⋮⋮</span>
-          <h3 className="company-name">{project.company}</h3>
-          <span className="period">
-            {formatPeriod(project.startDate, project.endDate)}
-          </span>
-        </div>
-        <div className="career-actions">
-          <button
-            className="btn-edit"
-            onClick={(e) => {
-              e.stopPropagation();
-              onEdit(project);
-            }}
-          >
-            수정
-          </button>
-          <button
-            className="btn-delete"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(project.id);
-            }}
-          >
-            삭제
-          </button>
-        </div>
-      </div>
-
-      <div className="career-card-body">
-        <div className="career-meta">
-          {project.department && (
-            <span className="meta-item">
-              <strong>부서:</strong> {project.department}
-            </span>
-          )}
-          {project.position && (
-            <span className="meta-item">
-              <strong>직책:</strong> {project.position}
-            </span>
-          )}
-        </div>
-
-        {project.skills && project.skills.length > 0 && (
-          <div className="career-skills">
-            {project.skills.map((skill, index) => (
-              <span key={index} className="skill-tag">
-                {skill}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
   );
 };
 
@@ -710,509 +525,430 @@ const Careers = () => {
     return cleaned.substring(0, maxLength);
   };
 
-  return (
-    <div className="careers-container">
-      <header className="careers-header">
-        <h1>Careers 관리</h1>
-        <p className="subtitle">경력 정보를 관리합니다</p>
-      </header>
-
-      {error && <div className="error-banner">{error}</div>}
-
-      {/* 탭 */}
-      <div className="tabs">
-        <button
-          className={`tab ${activeTab === "business" ? "active" : ""}`}
-          onClick={() => setActiveTab("business")}
+  // 스킬 태그 입력 위젯 (business/project 공용)
+  const renderSkillTags = (skills: string[] | undefined) => (
+    <div className={styles.tagInput}>
+      {skills && skills.length > 0 && (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleSkillsDragEnd}
         >
-          업무 경력 ({businessList.length})
-        </button>
-        <button
-          className={`tab ${activeTab === "projects" ? "active" : ""}`}
-          onClick={() => setActiveTab("projects")}
-        >
-          프로젝트 경력 ({projectList.length})
-        </button>
+          <SortableContext
+            items={skills.map((_, index) => index)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className={styles.tagsDisplay}>
+              {skills.map((skill, index) => (
+                <SortableSkillTag
+                  key={index}
+                  id={index}
+                  skill={skill}
+                  onRemove={() => handleRemoveSkill(index)}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+      )}
+      <div className={styles.tagInputRow}>
+        <input
+          type="text"
+          value={skillInput}
+          onChange={(e) => setSkillInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleAddSkill();
+            }
+          }}
+          placeholder="스킬 입력 후 Enter"
+        />
+        <Button type="button" variant="outline" onClick={handleAddSkill}>
+          추가
+        </Button>
       </div>
+    </div>
+  );
+
+  return (
+    <Page>
+      <PageHeader title="Careers 관리" subtitle="경력 정보를 관리합니다" />
+
+      <ErrorBanner message={error} />
+
+      <Tabs
+        active={activeTab}
+        onChange={setActiveTab}
+        tabs={[
+          { key: "business", label: `업무 경력 (${businessList.length})` },
+          { key: "projects", label: `프로젝트 경력 (${projectList.length})` },
+        ]}
+      />
 
       {loading ? (
-        <div className="loading">
-          <div className="spinner"></div>
-          <p>로딩중...</p>
-        </div>
+        <Spinner />
+      ) : activeTab === "business" ? (
+        <>
+          <Toolbar title="업무 경력 목록">
+            <Button onClick={handleAddBusiness}>+ 경력 추가</Button>
+          </Toolbar>
+
+          {businessList.length === 0 ? (
+            <EmptyState
+              message="등록된 업무 경력이 없습니다."
+              action={<Button onClick={handleAddBusiness}>첫 경력 추가하기</Button>}
+            />
+          ) : (
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleBusinessDragEnd}
+            >
+              <SortableContext
+                items={businessList.map((b) => b.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className={styles.list}>
+                  {businessList.map((business) => (
+                    <SortableCard
+                      key={business.id}
+                      id={business.id}
+                      title={business.company}
+                      aside={formatPeriod(business.startDate, business.endDate)}
+                      onEdit={() => handleEditBusiness(business)}
+                      onDelete={() => handleDeleteBusiness(business.id)}
+                    >
+                      {(business.department || business.position) && (
+                        <div className={styles.meta}>
+                          {business.department && (
+                            <span>
+                              <strong>부서:</strong> {business.department}
+                            </span>
+                          )}
+                          {business.position && (
+                            <span>
+                              <strong>직책:</strong> {business.position}
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      {business.skills && business.skills.length > 0 && (
+                        <div className={styles.skills}>
+                          {business.skills.map((skill, index) => (
+                            <span key={index} className={styles.skillTag}>
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {business.details && business.details.length > 0 && (
+                        <div className={styles.details}>
+                          <strong>업무 내용:</strong>
+                          <ul>
+                            {business.details.map((detail, index) => (
+                              <li key={index}>{detail}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </SortableCard>
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
+          )}
+        </>
       ) : (
-        <div className="content">
-          {/* Business 탭 */}
-          {activeTab === "business" && (
-            <div className="careers-section">
-              <div className="section-header">
-                <h2>업무 경력 목록</h2>
-                <button className="btn-primary" onClick={handleAddBusiness}>
-                  + 경력 추가
-                </button>
-              </div>
+        <>
+          <Toolbar title="프로젝트 경력 목록">
+            <Button onClick={handleAddProject}>+ 경력 추가</Button>
+          </Toolbar>
 
-              {businessList.length === 0 ? (
-                <div className="empty-state">
-                  <p>등록된 업무 경력이 없습니다.</p>
-                  <button className="btn-primary" onClick={handleAddBusiness}>
-                    첫 경력 추가하기
-                  </button>
+          {projectList.length === 0 ? (
+            <EmptyState
+              message="등록된 프로젝트 경력이 없습니다."
+              action={<Button onClick={handleAddProject}>첫 경력 추가하기</Button>}
+            />
+          ) : (
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleCareerProjectDragEnd}
+            >
+              <SortableContext
+                items={projectList.map((p) => p.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className={styles.list}>
+                  {projectList.map((project) => (
+                    <SortableCard
+                      key={project.id}
+                      id={project.id}
+                      title={project.company}
+                      aside={formatPeriod(project.startDate, project.endDate)}
+                      onEdit={() => handleEditProject(project)}
+                      onDelete={() => handleDeleteProject(project.id)}
+                    >
+                      {(project.department || project.position) && (
+                        <div className={styles.meta}>
+                          {project.department && (
+                            <span>
+                              <strong>부서:</strong> {project.department}
+                            </span>
+                          )}
+                          {project.position && (
+                            <span>
+                              <strong>직책:</strong> {project.position}
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      {project.skills && project.skills.length > 0 && (
+                        <div className={styles.skills}>
+                          {project.skills.map((skill, index) => (
+                            <span key={index} className={styles.skillTag}>
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </SortableCard>
+                  ))}
                 </div>
-              ) : (
-                <DndContext
-                  sensors={sensors}
-                  collisionDetection={closestCenter}
-                  onDragEnd={handleBusinessDragEnd}
-                >
-                  <SortableContext
-                    items={businessList.map((b) => b.id)}
-                    strategy={verticalListSortingStrategy}
-                  >
-                    <div className="career-list">
-                      {businessList.map((business) => (
-                        <SortableBusinessItem
-                          key={business.id}
-                          business={business}
-                          onEdit={handleEditBusiness}
-                          onDelete={handleDeleteBusiness}
-                          formatPeriod={formatPeriod}
-                        />
-                      ))}
-                    </div>
-                  </SortableContext>
-                </DndContext>
-              )}
-            </div>
+              </SortableContext>
+            </DndContext>
           )}
-
-          {/* Career Projects 탭 */}
-          {activeTab === "projects" && (
-            <div className="careers-section">
-              <div className="section-header">
-                <h2>프로젝트 경력 목록</h2>
-                <button className="btn-primary" onClick={handleAddProject}>
-                  + 경력 추가
-                </button>
-              </div>
-
-              {projectList.length === 0 ? (
-                <div className="empty-state">
-                  <p>등록된 프로젝트 경력이 없습니다.</p>
-                  <button className="btn-primary" onClick={handleAddProject}>
-                    첫 경력 추가하기
-                  </button>
-                </div>
-              ) : (
-                <DndContext
-                  sensors={sensors}
-                  collisionDetection={closestCenter}
-                  onDragEnd={handleCareerProjectDragEnd}
-                >
-                  <SortableContext
-                    items={projectList.map((p) => p.id)}
-                    strategy={verticalListSortingStrategy}
-                  >
-                    <div className="career-list">
-                      {projectList.map((project) => (
-                        <SortableCareerProjectItem
-                          key={project.id}
-                          project={project}
-                          onEdit={handleEditProject}
-                          onDelete={handleDeleteProject}
-                          formatPeriod={formatPeriod}
-                        />
-                      ))}
-                    </div>
-                  </SortableContext>
-                </DndContext>
-              )}
-            </div>
-          )}
-        </div>
+        </>
       )}
 
-      {/* 모달 */}
-      {modalType && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>
-                {modalType === "business"
-                  ? editingBusiness
-                    ? "업무 경력 수정"
-                    : "업무 경력 추가"
-                  : editingProject
-                  ? "프로젝트 경력 수정"
-                  : "프로젝트 경력 추가"}
-              </h2>
-              <button className="btn-close" onClick={closeModal}>
-                ×
-              </button>
-            </div>
-            <div className="modal-body">
-              {modalType === "business" ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSaveBusiness();
-                  }}
-                >
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>회사명 *</label>
-                      <input
-                        ref={companyInputRef}
-                        type="text"
-                        value={businessForm.company}
-                        onChange={(e) =>
-                          setBusinessForm({
-                            ...businessForm,
-                            company: e.target.value,
-                          })
-                        }
-                        placeholder="회사명 입력"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>부서</label>
-                      <input
-                        type="text"
-                        value={businessForm.department}
-                        onChange={(e) =>
-                          setBusinessForm({
-                            ...businessForm,
-                            department: e.target.value,
-                          })
-                        }
-                        placeholder="부서명 입력"
-                      />
-                    </div>
-                  </div>
+      {/* 업무 경력 모달 */}
+      <Modal
+        open={modalType === "business"}
+        onClose={closeModal}
+        title={editingBusiness ? "업무 경력 수정" : "업무 경력 추가"}
+      >
+        <Form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSaveBusiness();
+          }}
+        >
+          <FormRow>
+            <FormField label="회사명" required>
+              <input
+                ref={modalType === "business" ? companyInputRef : undefined}
+                type="text"
+                value={businessForm.company}
+                onChange={(e) =>
+                  setBusinessForm({ ...businessForm, company: e.target.value })
+                }
+                placeholder="회사명 입력"
+                required
+              />
+            </FormField>
+            <FormField label="부서">
+              <input
+                type="text"
+                value={businessForm.department}
+                onChange={(e) =>
+                  setBusinessForm({
+                    ...businessForm,
+                    department: e.target.value,
+                  })
+                }
+                placeholder="부서명 입력"
+              />
+            </FormField>
+          </FormRow>
 
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>시작일 * (YY.MM.)</label>
-                      <input
-                        type="text"
-                        value={businessForm.startDate}
-                        onChange={(e) =>
-                          setBusinessForm({
-                            ...businessForm,
-                            startDate: handleDateInput(e.target.value),
-                          })
-                        }
-                        placeholder="24.01."
-                        pattern="\d{2}\.\d{2}\."
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>종료일 (YY.MM.)</label>
-                      <input
-                        type="text"
-                        value={businessForm.endDate}
-                        onChange={(e) =>
-                          setBusinessForm({
-                            ...businessForm,
-                            endDate: handleDateInput(e.target.value),
-                          })
-                        }
-                        placeholder="24.12. (비워두면 현재)"
-                        pattern="\d{2}\.\d{2}\."
-                      />
-                    </div>
-                  </div>
+          <FormRow>
+            <FormField label="시작일 (YY.MM.)" required>
+              <input
+                type="text"
+                value={businessForm.startDate}
+                onChange={(e) =>
+                  setBusinessForm({
+                    ...businessForm,
+                    startDate: handleDateInput(e.target.value),
+                  })
+                }
+                placeholder="24.01."
+                pattern="\d{2}\.\d{2}\."
+                required
+              />
+            </FormField>
+            <FormField label="종료일 (YY.MM.)">
+              <input
+                type="text"
+                value={businessForm.endDate}
+                onChange={(e) =>
+                  setBusinessForm({
+                    ...businessForm,
+                    endDate: handleDateInput(e.target.value),
+                  })
+                }
+                placeholder="24.12. (비워두면 현재)"
+                pattern="\d{2}\.\d{2}\."
+              />
+            </FormField>
+          </FormRow>
 
-                  <div className="form-group">
-                    <label>직책</label>
-                    <input
-                      type="text"
-                      value={businessForm.position}
-                      onChange={(e) =>
-                        setBusinessForm({
-                          ...businessForm,
-                          position: e.target.value,
-                        })
-                      }
-                      placeholder="직책 입력"
-                    />
-                  </div>
+          <FormField label="직책">
+            <input
+              type="text"
+              value={businessForm.position}
+              onChange={(e) =>
+                setBusinessForm({ ...businessForm, position: e.target.value })
+              }
+              placeholder="직책 입력"
+            />
+          </FormField>
 
-                  <div className="form-group">
-                    <label>스킬</label>
-                    <div className="tag-input-wrapper">
-                      {businessForm.skills &&
-                        businessForm.skills.length > 0 && (
-                          <DndContext
-                            sensors={sensors}
-                            collisionDetection={closestCenter}
-                            onDragEnd={handleSkillsDragEnd}
-                          >
-                            <SortableContext
-                              items={businessForm.skills.map(
-                                (_, index) => index
-                              )}
-                              strategy={verticalListSortingStrategy}
-                            >
-                              <div className="tags-display">
-                                {businessForm.skills.map((skill, index) => (
-                                  <SortableSkillTag
-                                    key={index}
-                                    id={index}
-                                    skill={skill}
-                                    onRemove={() => handleRemoveSkill(index)}
-                                  />
-                                ))}
-                              </div>
-                            </SortableContext>
-                          </DndContext>
-                        )}
-                      {(!businessForm.skills ||
-                        businessForm.skills.length === 0) && (
-                        <div className="tags-display"></div>
-                      )}
-                      <div className="tag-input-row">
-                        <input
-                          type="text"
-                          value={skillInput}
-                          onChange={(e) => setSkillInput(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              e.preventDefault();
-                              handleAddSkill();
-                            }
-                          }}
-                          placeholder="스킬 입력 후 Enter"
-                        />
-                        <button
-                          type="button"
-                          className="btn-add-tag"
-                          onClick={handleAddSkill}
-                        >
-                          추가
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+          <FormField label="스킬">{renderSkillTags(businessForm.skills)}</FormField>
 
-                  <div className="form-group">
-                    <label>업무 내용</label>
-                    <div className="tag-input-wrapper">
-                      <div className="details-display">
-                        {businessForm.details?.map((detail, index) => (
-                          <div key={index} className="detail-item">
-                            <span>{detail}</span>
-                            <button
-                              type="button"
-                              className="detail-remove"
-                              onClick={() => handleRemoveDetail(index)}
-                            >
-                              ×
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="tag-input-row">
-                        <input
-                          type="text"
-                          value={detailInput}
-                          onChange={(e) => setDetailInput(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              e.preventDefault();
-                              handleAddDetail();
-                            }
-                          }}
-                          placeholder="업무 내용 입력 후 Enter"
-                        />
-                        <button
-                          type="button"
-                          className="btn-add-tag"
-                          onClick={handleAddDetail}
-                        >
-                          추가
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="modal-actions">
+          <FormField label="업무 내용">
+            <div className={styles.tagInput}>
+              <div className={styles.detailsDisplay}>
+                {businessForm.details?.map((detail, index) => (
+                  <div key={index} className={styles.detailItem}>
+                    <span>{detail}</span>
                     <button
                       type="button"
-                      className="btn-cancel"
-                      onClick={closeModal}
+                      className={styles.detailRemove}
+                      onClick={() => handleRemoveDetail(index)}
                     >
-                      취소
-                    </button>
-                    <button type="submit" className="btn-primary">
-                      저장
+                      ×
                     </button>
                   </div>
-                </form>
-              ) : (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSaveProject();
+                ))}
+              </div>
+              <div className={styles.tagInputRow}>
+                <input
+                  type="text"
+                  value={detailInput}
+                  onChange={(e) => setDetailInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleAddDetail();
+                    }
                   }}
-                >
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>회사명 *</label>
-                      <input
-                        ref={companyInputRef}
-                        type="text"
-                        value={projectForm.company}
-                        onChange={(e) =>
-                          setProjectForm({
-                            ...projectForm,
-                            company: e.target.value,
-                          })
-                        }
-                        placeholder="회사명 입력"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>부서</label>
-                      <input
-                        type="text"
-                        value={projectForm.department}
-                        onChange={(e) =>
-                          setProjectForm({
-                            ...projectForm,
-                            department: e.target.value,
-                          })
-                        }
-                        placeholder="부서명 입력"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>시작일 * (YY.MM.)</label>
-                      <input
-                        type="text"
-                        value={projectForm.startDate}
-                        onChange={(e) =>
-                          setProjectForm({
-                            ...projectForm,
-                            startDate: handleDateInput(e.target.value),
-                          })
-                        }
-                        placeholder="24.01."
-                        pattern="\d{2}\.\d{2}\."
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>종료일 (YY.MM.)</label>
-                      <input
-                        type="text"
-                        value={projectForm.endDate}
-                        onChange={(e) =>
-                          setProjectForm({
-                            ...projectForm,
-                            endDate: handleDateInput(e.target.value),
-                          })
-                        }
-                        placeholder="24.12. (비워두면 현재)"
-                        pattern="\d{2}\.\d{2}\."
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label>직책</label>
-                    <input
-                      type="text"
-                      value={projectForm.position}
-                      onChange={(e) =>
-                        setProjectForm({
-                          ...projectForm,
-                          position: e.target.value,
-                        })
-                      }
-                      placeholder="직책 입력"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>스킬</label>
-                    <div className="tag-input-wrapper">
-                      {projectForm.skills && projectForm.skills.length > 0 && (
-                        <DndContext
-                          sensors={sensors}
-                          collisionDetection={closestCenter}
-                          onDragEnd={handleSkillsDragEnd}
-                        >
-                          <SortableContext
-                            items={projectForm.skills.map((_, index) => index)}
-                            strategy={verticalListSortingStrategy}
-                          >
-                            <div className="tags-display">
-                              {projectForm.skills.map((skill, index) => (
-                                <SortableSkillTag
-                                  key={index}
-                                  id={index}
-                                  skill={skill}
-                                  onRemove={() => handleRemoveSkill(index)}
-                                />
-                              ))}
-                            </div>
-                          </SortableContext>
-                        </DndContext>
-                      )}
-                      {(!projectForm.skills ||
-                        projectForm.skills.length === 0) && (
-                        <div className="tags-display"></div>
-                      )}
-                      <div className="tag-input-row">
-                        <input
-                          type="text"
-                          value={skillInput}
-                          onChange={(e) => setSkillInput(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              e.preventDefault();
-                              handleAddSkill();
-                            }
-                          }}
-                          placeholder="스킬 입력 후 Enter"
-                        />
-                        <button
-                          type="button"
-                          className="btn-add-tag"
-                          onClick={handleAddSkill}
-                        >
-                          추가
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="modal-actions">
-                    <button
-                      type="button"
-                      className="btn-cancel"
-                      onClick={closeModal}
-                    >
-                      취소
-                    </button>
-                    <button type="submit" className="btn-primary">
-                      저장
-                    </button>
-                  </div>
-                </form>
-              )}
+                  placeholder="업무 내용 입력 후 Enter"
+                />
+                <Button type="button" variant="outline" onClick={handleAddDetail}>
+                  추가
+                </Button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
-    </div>
+          </FormField>
+
+          <FormActions>
+            <Button type="button" variant="ghost" onClick={closeModal}>
+              취소
+            </Button>
+            <Button type="submit">저장</Button>
+          </FormActions>
+        </Form>
+      </Modal>
+
+      {/* 프로젝트 경력 모달 */}
+      <Modal
+        open={modalType === "careerProject"}
+        onClose={closeModal}
+        title={editingProject ? "프로젝트 경력 수정" : "프로젝트 경력 추가"}
+      >
+        <Form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSaveProject();
+          }}
+        >
+          <FormRow>
+            <FormField label="회사명" required>
+              <input
+                ref={modalType === "careerProject" ? companyInputRef : undefined}
+                type="text"
+                value={projectForm.company}
+                onChange={(e) =>
+                  setProjectForm({ ...projectForm, company: e.target.value })
+                }
+                placeholder="회사명 입력"
+                required
+              />
+            </FormField>
+            <FormField label="부서">
+              <input
+                type="text"
+                value={projectForm.department}
+                onChange={(e) =>
+                  setProjectForm({
+                    ...projectForm,
+                    department: e.target.value,
+                  })
+                }
+                placeholder="부서명 입력"
+              />
+            </FormField>
+          </FormRow>
+
+          <FormRow>
+            <FormField label="시작일 (YY.MM.)" required>
+              <input
+                type="text"
+                value={projectForm.startDate}
+                onChange={(e) =>
+                  setProjectForm({
+                    ...projectForm,
+                    startDate: handleDateInput(e.target.value),
+                  })
+                }
+                placeholder="24.01."
+                pattern="\d{2}\.\d{2}\."
+                required
+              />
+            </FormField>
+            <FormField label="종료일 (YY.MM.)">
+              <input
+                type="text"
+                value={projectForm.endDate}
+                onChange={(e) =>
+                  setProjectForm({
+                    ...projectForm,
+                    endDate: handleDateInput(e.target.value),
+                  })
+                }
+                placeholder="24.12. (비워두면 현재)"
+                pattern="\d{2}\.\d{2}\."
+              />
+            </FormField>
+          </FormRow>
+
+          <FormField label="직책">
+            <input
+              type="text"
+              value={projectForm.position}
+              onChange={(e) =>
+                setProjectForm({ ...projectForm, position: e.target.value })
+              }
+              placeholder="직책 입력"
+            />
+          </FormField>
+
+          <FormField label="스킬">{renderSkillTags(projectForm.skills)}</FormField>
+
+          <FormActions>
+            <Button type="button" variant="ghost" onClick={closeModal}>
+              취소
+            </Button>
+            <Button type="submit">저장</Button>
+          </FormActions>
+        </Form>
+      </Modal>
+    </Page>
   );
 };
 
