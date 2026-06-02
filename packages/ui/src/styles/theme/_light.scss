@@ -5,8 +5,8 @@
 // 직접 사용 금지 — theme/index.scss 경유
 
 $theme-light: (
-  // Background — 쿨 화이트 페이지 + 블루 틴트 슬레이트 카드
-  --color-bg:               #{c.$color-slate-25},
+  // Background — 페이지는 화이트, 카드/패널만 블루 틴트 슬레이트
+  --color-bg:               #{c.$color-bg-light},
   --color-bg-secondary:     #{c.$color-slate-50},
 
   // Text — 슬레이트(블루 언더톤)
