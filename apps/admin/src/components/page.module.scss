@@ -11,6 +11,13 @@
   gap: sp.$space-6;
 }
 
+// 칸반 등 넓은 레이아웃 — 전체 너비 사용(좌우 패딩만 유지)
+.wide {
+  max-width: none;
+  padding-left: sp.$space-8;
+  padding-right: sp.$space-8;
+}
+
 // ── PageHeader ───────────────────────────────────────────────────────────
 .header {
   display: flex;

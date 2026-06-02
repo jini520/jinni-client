@@ -475,7 +475,7 @@ const Skills = () => {
   const activeSkill = activeId ? skillMap[activeId] : null;
 
   return (
-    <Page>
+    <Page wide>
       <PageHeader
         title="Skills 관리"
         subtitle={`스킬 ${totalSkills} · 카테고리 ${categories.length}개 — 카드를 드래그해 순서·카테고리를 바꿀 수 있습니다`}
