@@ -1,0 +1,86 @@
+@use 'tokens/spacing' as sp;
+@use 'tokens/typography' as t;
+@use 'tokens/shadows' as sh;
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: sp.$space-3;
+  padding: sp.$space-4 sp.$space-5;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-bg-secondary);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+
+  &:hover {
+    border-color: var(--color-border-strong);
+  }
+}
+
+.dragging {
+  box-shadow: sh.$shadow-lg;
+  border-color: var(--color-accent);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: sp.$space-3;
+}
+
+.handleArea {
+  display: flex;
+  align-items: center;
+  gap: sp.$space-2;
+  min-width: 0;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.handle {
+  color: var(--color-text-faint);
+  font-size: t.$text-md;
+  line-height: 1;
+  user-select: none;
+}
+
+.title {
+  font-size: t.$text-md;
+  font-weight: t.$weight-semibold;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.aside {
+  flex-shrink: 0;
+  font-size: t.$text-sm;
+  color: var(--color-text-subtle);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: sp.$space-1;
+  flex-shrink: 0;
+}
+
+.body {
+  font-size: t.$text-sm;
+  color: var(--color-text-subtle);
+}
+
+// 삭제 버튼 danger 변형 (@jinni/ui Button.ghost 위에 덮어쓰기 — 더블 클래스로 우선순위 확보)
+.danger.danger {
+  color: var(--color-red);
+
+  &:hover {
+    color: var(--color-red);
+    background: color-mix(in srgb, var(--color-red) 12%, transparent);
+  }
+}

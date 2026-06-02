@@ -1,0 +1,18 @@
+@use 'tokens/spacing' as sp;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: sp.$space-3;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: sp.$space-1;
+
+  strong {
+    color: var(--color-text);
+    font-weight: var(--weight-medium);
+  }
+}
