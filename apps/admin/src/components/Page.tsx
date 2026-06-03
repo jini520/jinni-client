@@ -4,12 +4,20 @@ import styles from "./page.module.scss";
 export function Page({
   children,
   wide,
+  fill,
 }: {
   children: ReactNode;
   wide?: boolean;
+  fill?: boolean;
 }) {
   return (
-    <div className={`${styles.page} ${wide ? styles.wide : ""}`}>{children}</div>
+    <div
+      className={`${styles.page} ${wide ? styles.wide : ""} ${
+        fill ? styles.fill : ""
+      }`}
+    >
+      {children}
+    </div>
   );
 }
 

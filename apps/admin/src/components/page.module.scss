@@ -18,6 +18,13 @@
   padding-right: sp.$space-8;
 }
 
+// 뷰포트 높이를 꽉 채우는 레이아웃(칸반 등) — 마지막 자식이 남은 높이 차지
+.fill {
+  flex: 1;
+  min-height: 0;
+  padding-bottom: sp.$space-8;
+}
+
 // ── PageHeader ───────────────────────────────────────────────────────────
 .header {
   display: flex;
