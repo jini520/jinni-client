@@ -290,6 +290,9 @@ const Educations = () => {
                       onEdit={() => handleEditEducation(education)}
                       onDelete={() => handleDeleteEducation(education.id)}
                     >
+                      {education.description && (
+                        <p className={styles.desc}>{education.description}</p>
+                      )}
                       <MetaRow>
                         {education.startDate && (
                           <MetaItem icon={<CalendarIcon />}>
@@ -305,9 +308,6 @@ const Educations = () => {
                           </MetaItem>
                         )}
                       </MetaRow>
-                      {education.description && (
-                        <p className={styles.desc}>{education.description}</p>
-                      )}
                     </SortableCard>
                   ))}
                 </div>

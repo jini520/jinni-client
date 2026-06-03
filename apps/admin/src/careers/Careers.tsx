@@ -641,16 +641,6 @@ const Careers = () => {
                         )}
                       </MetaRow>
 
-                      {business.skills && business.skills.length > 0 && (
-                        <div className={styles.skills}>
-                          {business.skills.map((skill, index) => (
-                            <span key={index} className={styles.skillTag}>
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-
                       {business.details && business.details.length > 0 && (
                         <div className={styles.details}>
                           <strong>업무 내용:</strong>
@@ -659,6 +649,16 @@ const Careers = () => {
                               <li key={index}>{detail}</li>
                             ))}
                           </ul>
+                        </div>
+                      )}
+
+                      {business.skills && business.skills.length > 0 && (
+                        <div className={styles.skills}>
+                          {business.skills.map((skill, index) => (
+                            <span key={index} className={styles.skillTag}>
+                              {skill}
+                            </span>
+                          ))}
                         </div>
                       )}
                     </SortableCard>
