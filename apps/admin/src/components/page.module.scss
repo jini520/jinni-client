@@ -3,6 +3,7 @@
 @use 'tokens/breakpoints' as bp;
 
 .page {
+  width: 100%;
   max-width: 1080px;
   margin: 0 auto;
   padding: sp.$space-10 sp.$space-6 sp.$space-16;

@@ -4,6 +4,7 @@
 @use 'tokens/breakpoints' as bp;
 
 .container {
+  width: 100%;
   max-width: 1080px;
   margin: 0 auto;
   padding: sp.$space-16 sp.$space-6 sp.$space-12;
