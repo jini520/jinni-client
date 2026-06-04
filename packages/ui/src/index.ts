@@ -1,10 +1,12 @@
 /// <reference path="./types/css-modules.d.ts" />
 
+// ── Icons ─────────────────────────────────────────────────────────────────────
+export * from './icons';
+
 // ── Atoms ────────────────────────────────────────────────────────────────────
 export * from './atoms/Button';
 export * from './atoms/Tag';
 export * from './atoms/Badge';
-export * from './atoms/Icon';
 export * from './atoms/Pill';
 
 // ── Molecules ────────────────────────────────────────────────────────────────
@@ -15,7 +17,6 @@ export * from './molecules/Accordion';
 export * from './organisms/Nav';
 export * from './organisms/Card';
 export * from './organisms/Modal';
-export * from './organisms/IconGrid';
 export * from './organisms/ProgressBar';
 
 // ── Theme ────────────────────────────────────────────────────────────────────
