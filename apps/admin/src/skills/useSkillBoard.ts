@@ -1,15 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import {
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
   type DragEndEvent,
   type DragOverEvent,
   type DragStartEvent,
 } from "@dnd-kit/core";
-import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import { arrayMove } from "@dnd-kit/sortable";
 import { skillsApi, categoriesApi } from "../api/skills";
+import { useSortableSensors } from "../shared/useSortableSensors";
+import { useResourceMutations } from "../shared/useResourceMutations";
 import type {
   SkillDto,
   CategoryDto,
@@ -39,10 +37,7 @@ export const useSkillBoard = () => {
     itemsRef.current = items;
   }, [items]);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  );
+  const sensors = useSortableSensors({ activationConstraint: { distance: 6 } });
 
   const loadData = async () => {
     setLoading(true);
@@ -214,66 +209,29 @@ export const useSkillBoard = () => {
     }
   };
 
-  const saveSkill = async (
-    id: string,
-    data: SkillRequestDto
-  ): Promise<boolean> => {
-    try {
-      await skillsApi.updateSkill(id, data);
-      loadData();
-      return true;
-    } catch (err) {
-      setError("스킬 저장에 실패했습니다.");
-      console.error(err);
-      return false;
-    }
-  };
+  const { runSave, runDelete } = useResourceMutations(loadData, setError);
 
-  const deleteSkill = async (id: string) => {
-    if (!confirm("정말 삭제하시겠습니까?")) return;
-    try {
-      await skillsApi.deleteSkill(id);
-      loadData();
-    } catch (err) {
-      setError("스킬 삭제에 실패했습니다.");
-      console.error(err);
-    }
-  };
+  const saveSkill = (id: string, data: SkillRequestDto) =>
+    runSave(() => skillsApi.updateSkill(id, data), "스킬 저장에 실패했습니다.");
 
-  const saveCategory = async (
-    category: CategoryDto | null,
-    data: CategoryRequestDto
-  ): Promise<boolean> => {
-    try {
-      if (category) {
-        await categoriesApi.updateCategory(category.id, data);
-      } else {
-        await categoriesApi.createCategory(data);
-      }
-      loadData();
-      return true;
-    } catch (err) {
-      setError("카테고리 저장에 실패했습니다.");
-      console.error(err);
-      return false;
-    }
-  };
+  const deleteSkill = (id: string) =>
+    runDelete(() => skillsApi.deleteSkill(id), "스킬 삭제에 실패했습니다.");
 
-  const deleteCategory = async (id: string) => {
-    if (
-      !confirm(
-        "정말 삭제하시겠습니까? 해당 카테고리의 스킬은 미분류로 이동됩니다."
-      )
-    )
-      return;
-    try {
-      await categoriesApi.deleteCategory(id);
-      loadData();
-    } catch (err) {
-      setError("카테고리 삭제에 실패했습니다.");
-      console.error(err);
-    }
-  };
+  const saveCategory = (category: CategoryDto | null, data: CategoryRequestDto) =>
+    runSave(
+      () =>
+        category
+          ? categoriesApi.updateCategory(category.id, data)
+          : categoriesApi.createCategory(data),
+      "카테고리 저장에 실패했습니다."
+    );
+
+  const deleteCategory = (id: string) =>
+    runDelete(
+      () => categoriesApi.deleteCategory(id),
+      "카테고리 삭제에 실패했습니다.",
+      "정말 삭제하시겠습니까? 해당 카테고리의 스킬은 미분류로 이동됩니다."
+    );
 
   const sortedCategories = [...categories].sort(
     (categoryA, categoryB) => (categoryA.order || 0) - (categoryB.order || 0)

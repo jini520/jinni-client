@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import type { CategoryDto, CategoryRequestDto } from "../../../@types";
 import {
   Modal,
@@ -7,6 +6,7 @@ import {
   FormActions,
   Button,
 } from "../../../components";
+import { useModalForm } from "../../../shared/useModalForm";
 
 export const CategoryFormModal = ({
   open,
@@ -21,33 +21,15 @@ export const CategoryFormModal = ({
   onSubmit: (data: CategoryRequestDto) => void;
   onClose: () => void;
 }) => {
-  const [form, setForm] = useState<CategoryRequestDto>({
-    name: "",
-    nameEn: "",
-    order: 0,
-  });
-  const nameRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (open) {
-      setForm(
-        category
-          ? {
-              name: category.name,
-              nameEn: category.nameEn,
-              order: category.order || 0,
-            }
-          : { name: "", nameEn: "", order: defaultOrder }
-      );
-    }
-  }, [open, category, defaultOrder]);
-
-  useEffect(() => {
-    if (open) {
-      const timer = setTimeout(() => nameRef.current?.focus(), 100);
-      return () => clearTimeout(timer);
-    }
-  }, [open]);
+  const { form, setForm, focusRef } = useModalForm<CategoryRequestDto>(open, () =>
+    category
+      ? {
+          name: category.name,
+          nameEn: category.nameEn,
+          order: category.order || 0,
+        }
+      : { name: "", nameEn: "", order: defaultOrder }
+  );
 
   return (
     <Modal
@@ -63,7 +45,7 @@ export const CategoryFormModal = ({
       >
         <FormField label="카테고리 이름" required>
           <input
-            ref={nameRef}
+            ref={focusRef}
             type="text"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
