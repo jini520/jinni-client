@@ -7,16 +7,13 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  useDroppable,
   type DragEndEvent,
   type DragOverEvent,
   type DragStartEvent,
 } from "@dnd-kit/core";
 import {
   arrayMove,
-  SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { skillsApi, categoriesApi } from "../api/skills";
 import type {
@@ -35,114 +32,13 @@ import {
   FormField,
   FormActions,
   Button,
-  EditIcon,
-  CloseIcon,
 } from "../components";
 import styles from "./skills.module.scss";
-import { SkillCard, SkillCardOverlay } from "./components/SkillCard";
+import { SkillCardOverlay } from "./components/SkillCard";
+import { SkillColumn } from "./components/SkillColumn";
 
 const UNCAT = "__uncategorized__";
 type ModalType = "skill" | "category" | null;
-
-// ── 카테고리 컬럼 ────────────────────────────────────────────────────────
-const Column = ({
-  id,
-  name,
-  count,
-  category,
-  skills,
-  addValue,
-  onAddChange,
-  onAddSubmit,
-  onEditCategory,
-  onDeleteCategory,
-  onEditSkill,
-  onDeleteSkill,
-}: {
-  id: string;
-  name: string;
-  count: number;
-  category: CategoryDto | null;
-  skills: SkillDto[];
-  addValue: string;
-  onAddChange: (v: string) => void;
-  onAddSubmit: () => void;
-  onEditCategory: (c: CategoryDto) => void;
-  onDeleteCategory: (id: string) => void;
-  onEditSkill: (s: SkillDto) => void;
-  onDeleteSkill: (id: string) => void;
-}) => {
-  const { setNodeRef, isOver } = useDroppable({ id });
-
-  return (
-    <div className={`${styles.column} ${id === UNCAT ? styles.uncategorized : ""}`}>
-      <div className={styles.columnHeader}>
-        <div className={styles.columnTitle}>
-          <span className={styles.columnName}>{name}</span>
-          <span className={styles.columnCount}>{count}</span>
-        </div>
-        {category && (
-          <div className={styles.columnActions}>
-            <button
-              className={styles.iconBtn}
-              onClick={() => onEditCategory(category)}
-              title="카테고리 수정"
-              aria-label="카테고리 수정"
-            >
-              <EditIcon />
-            </button>
-            <button
-              className={`${styles.iconBtn} ${styles.iconBtnDanger}`}
-              onClick={() => onDeleteCategory(category.id)}
-              title="카테고리 삭제"
-              aria-label="카테고리 삭제"
-            >
-              <CloseIcon />
-            </button>
-          </div>
-        )}
-      </div>
-
-      <div
-        ref={setNodeRef}
-        className={`${styles.columnBody} ${isOver ? styles.columnBodyOver : ""}`}
-      >
-        <SortableContext
-          items={skills.map((s) => s.id)}
-          strategy={verticalListSortingStrategy}
-        >
-          {skills.length === 0 ? (
-            <div className={styles.empty}>여기로 드래그</div>
-          ) : (
-            skills.map((skill) => (
-              <SkillCard
-                key={skill.id}
-                skill={skill}
-                onEdit={onEditSkill}
-                onDelete={onDeleteSkill}
-              />
-            ))
-          )}
-        </SortableContext>
-      </div>
-
-      <div className={styles.footer}>
-        <input
-          className={styles.addInput}
-          value={addValue}
-          onChange={(e) => onAddChange(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              onAddSubmit();
-            }
-          }}
-          placeholder="+ 스킬 추가"
-        />
-      </div>
-    </div>
-  );
-};
 
 const Skills = () => {
   const [skillMap, setSkillMap] = useState<Record<string, SkillDto>>({});
@@ -435,11 +331,12 @@ const Skills = () => {
         >
           <div className={styles.board}>
             {columns.map((col) => (
-              <Column
+              <SkillColumn
                 key={col.id}
                 id={col.id}
                 name={col.name}
                 category={col.category}
+                isUncategorized={col.id === UNCAT}
                 count={(items[col.id] || []).length}
                 skills={(items[col.id] || []).map((sid) => skillMap[sid]).filter(Boolean)}
                 addValue={addInputs[col.id] || ""}
