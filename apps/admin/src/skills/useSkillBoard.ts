@@ -48,28 +48,31 @@ export const useSkillBoard = () => {
     setLoading(true);
     setError(null);
     try {
-      const [sRes, cRes] = await Promise.all([
+      const [skillsRes, categoriesRes] = await Promise.all([
         skillsApi.getAllSkills(),
         categoriesApi.getCategories(),
       ]);
-      const sk: SkillDto[] = sRes.data.data.skills || [];
-      const cats: CategoryDto[] = cRes.data.data || [];
+      const skills: SkillDto[] = skillsRes.data.data.skills || [];
+      const loadedCategories: CategoryDto[] = categoriesRes.data.data || [];
 
-      const map: Record<string, SkillDto> = {};
-      sk.forEach((s) => (map[s.id] = s));
-      setSkillMap(map);
-      setCategories(cats);
+      const skillsById: Record<string, SkillDto> = {};
+      skills.forEach((skill) => (skillsById[skill.id] = skill));
+      setSkillMap(skillsById);
+      setCategories(loadedCategories);
 
-      const it: Record<string, string[]> = {};
-      cats.forEach((c) => (it[c.id] = []));
-      it[UNCAT] = [];
-      [...sk]
-        .sort((a, b) => (a.order || 0) - (b.order || 0))
-        .forEach((s) => {
-          const cid = s.categoryId && it[s.categoryId] ? s.categoryId : UNCAT;
-          it[cid].push(s.id);
+      const itemsByColumn: Record<string, string[]> = {};
+      loadedCategories.forEach((category) => (itemsByColumn[category.id] = []));
+      itemsByColumn[UNCAT] = [];
+      [...skills]
+        .sort((skillA, skillB) => (skillA.order || 0) - (skillB.order || 0))
+        .forEach((skill) => {
+          const columnId =
+            skill.categoryId && itemsByColumn[skill.categoryId]
+              ? skill.categoryId
+              : UNCAT;
+          itemsByColumn[columnId].push(skill.id);
         });
-      setItems(it);
+      setItems(itemsByColumn);
     } catch (err) {
       setError("데이터를 불러오는데 실패했습니다.");
       console.error(err);
@@ -82,10 +85,12 @@ export const useSkillBoard = () => {
     loadData();
   }, []);
 
-  const findContainer = (id: string): string | undefined => {
-    const cur = itemsRef.current;
-    if (id in cur) return id;
-    return Object.keys(cur).find((k) => cur[k].includes(id));
+  const findColumn = (itemId: string): string | undefined => {
+    const currentItems = itemsRef.current;
+    if (itemId in currentItems) return itemId;
+    return Object.keys(currentItems).find((columnId) =>
+      currentItems[columnId].includes(itemId)
+    );
   };
 
   const handleDragStart = (e: DragStartEvent) =>
@@ -94,48 +99,65 @@ export const useSkillBoard = () => {
   const handleDragOver = (e: DragOverEvent) => {
     const { active, over } = e;
     if (!over) return;
-    const a = String(active.id);
-    const o = String(over.id);
-    const ac = findContainer(a);
-    const oc = findContainer(o);
-    if (!ac || !oc || ac === oc) return;
+    const activeItemId = String(active.id);
+    const overItemId = String(over.id);
+    const activeColumnId = findColumn(activeItemId);
+    const overColumnId = findColumn(overItemId);
+    if (!activeColumnId || !overColumnId || activeColumnId === overColumnId)
+      return;
 
     setItems((prev) => {
-      const aItems = prev[ac];
-      const oItems = prev[oc];
-      const overIndex = o in prev ? oItems.length : oItems.indexOf(o);
-      const newIndex = overIndex === -1 ? oItems.length : overIndex;
+      const activeColumnItems = prev[activeColumnId];
+      const overColumnItems = prev[overColumnId];
+      const overIndexRaw =
+        overItemId in prev
+          ? overColumnItems.length
+          : overColumnItems.indexOf(overItemId);
+      const insertIndex = overIndexRaw === -1 ? overColumnItems.length : overIndexRaw;
       return {
         ...prev,
-        [ac]: aItems.filter((x) => x !== a),
-        [oc]: [...oItems.slice(0, newIndex), a, ...oItems.slice(newIndex)],
+        [activeColumnId]: activeColumnItems.filter(
+          (itemId) => itemId !== activeItemId
+        ),
+        [overColumnId]: [
+          ...overColumnItems.slice(0, insertIndex),
+          activeItemId,
+          ...overColumnItems.slice(insertIndex),
+        ],
       };
     });
   };
 
-  const persist = async (board: Record<string, string[]>) => {
+  const persist = async (itemsByColumn: Record<string, string[]>) => {
     const updates: Promise<unknown>[] = [];
-    const nextMap = { ...skillMap };
-    Object.keys(board).forEach((cId) => {
-      const desiredCat = cId === UNCAT ? "" : cId;
-      board[cId].forEach((sid, index) => {
-        const s = skillMap[sid];
-        if (!s) return;
-        const curCat = s.categoryId || "";
-        if (curCat !== desiredCat || (s.order ?? 0) !== index) {
+    const nextSkillMap = { ...skillMap };
+    Object.keys(itemsByColumn).forEach((columnId) => {
+      const desiredCategoryId = columnId === UNCAT ? "" : columnId;
+      itemsByColumn[columnId].forEach((skillId, index) => {
+        const skill = skillMap[skillId];
+        if (!skill) return;
+        const currentCategoryId = skill.categoryId || "";
+        if (
+          currentCategoryId !== desiredCategoryId ||
+          (skill.order ?? 0) !== index
+        ) {
           updates.push(
-            skillsApi.updateSkill(sid, {
-              name: s.name,
-              categoryId: desiredCat,
+            skillsApi.updateSkill(skillId, {
+              name: skill.name,
+              categoryId: desiredCategoryId,
               order: index,
             })
           );
-          nextMap[sid] = { ...s, categoryId: desiredCat, order: index };
+          nextSkillMap[skillId] = {
+            ...skill,
+            categoryId: desiredCategoryId,
+            order: index,
+          };
         }
       });
     });
     if (!updates.length) return;
-    setSkillMap(nextMap);
+    setSkillMap(nextSkillMap);
     try {
       await Promise.all(updates);
     } catch (err) {
@@ -149,36 +171,42 @@ export const useSkillBoard = () => {
     const { active, over } = e;
     setActiveId(null);
     if (!over) return;
-    const a = String(active.id);
-    const o = String(over.id);
-    const oc = findContainer(o);
-    if (!oc) return;
+    const activeItemId = String(active.id);
+    const overItemId = String(over.id);
+    const overColumnId = findColumn(overItemId);
+    if (!overColumnId) return;
 
-    const cur = itemsRef.current;
-    let next = cur;
-    const arr = cur[oc];
-    const oldIndex = arr.indexOf(a);
-    const newIndex = o in cur ? arr.length - 1 : arr.indexOf(o);
+    const currentItems = itemsRef.current;
+    let nextItems = currentItems;
+    const columnItems = currentItems[overColumnId];
+    const oldIndex = columnItems.indexOf(activeItemId);
+    const newIndex =
+      overItemId in currentItems
+        ? columnItems.length - 1
+        : columnItems.indexOf(overItemId);
     if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
-      next = { ...cur, [oc]: arrayMove(arr, oldIndex, newIndex) };
-      setItems(next);
+      nextItems = {
+        ...currentItems,
+        [overColumnId]: arrayMove(columnItems, oldIndex, newIndex),
+      };
+      setItems(nextItems);
     }
-    persist(next);
+    persist(nextItems);
   };
 
   const setAddInput = (id: string, value: string) =>
-    setAddInputs((p) => ({ ...p, [id]: value }));
+    setAddInputs((prev) => ({ ...prev, [id]: value }));
 
-  const submitAdd = async (containerId: string) => {
-    const name = (addInputs[containerId] || "").trim();
+  const submitAdd = async (columnId: string) => {
+    const name = (addInputs[columnId] || "").trim();
     if (!name) return;
     try {
       await skillsApi.createSkill({
         name,
-        order: (items[containerId] || []).length,
-        categoryId: containerId === UNCAT ? "" : containerId,
+        order: (items[columnId] || []).length,
+        categoryId: columnId === UNCAT ? "" : columnId,
       });
-      setAddInputs((p) => ({ ...p, [containerId]: "" }));
+      setAddInputs((prev) => ({ ...prev, [columnId]: "" }));
       loadData();
     } catch (err) {
       setError("스킬 추가에 실패했습니다.");
@@ -248,12 +276,16 @@ export const useSkillBoard = () => {
   };
 
   const sortedCategories = [...categories].sort(
-    (a, b) => (a.order || 0) - (b.order || 0)
+    (categoryA, categoryB) => (categoryA.order || 0) - (categoryB.order || 0)
   );
   const totalSkills = Object.keys(skillMap).length;
 
   const columns: SkillBoardColumn[] = [
-    ...sortedCategories.map((c) => ({ id: c.id, name: c.name, category: c })),
+    ...sortedCategories.map((category) => ({
+      id: category.id,
+      name: category.name,
+      category,
+    })),
   ];
   if ((items[UNCAT]?.length ?? 0) > 0) {
     columns.push({ id: UNCAT, name: "미분류", category: null });

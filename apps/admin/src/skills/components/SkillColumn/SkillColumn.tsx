@@ -73,7 +73,7 @@ export const SkillColumn = ({
         className={`${styles.columnBody} ${isOver ? styles.columnBodyOver : ""}`}
       >
         <SortableContext
-          items={skills.map((s) => s.id)}
+          items={skills.map((skill) => skill.id)}
           strategy={verticalListSortingStrategy}
         >
           {skills.length === 0 ? (

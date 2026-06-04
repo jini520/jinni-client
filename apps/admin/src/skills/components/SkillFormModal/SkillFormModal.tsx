@@ -69,9 +69,9 @@ export const SkillFormModal = ({
             onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
           >
             <option value="">미분류</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
               </option>
             ))}
           </select>

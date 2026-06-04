@@ -58,20 +58,20 @@ export const SkillBoard = ({
       onDragEnd={onDragEnd}
     >
       <div className={styles.board}>
-        {columns.map((col) => (
+        {columns.map((column) => (
           <SkillColumn
-            key={col.id}
-            id={col.id}
-            name={col.name}
-            category={col.category}
-            isUncategorized={col.id === UNCAT}
-            count={(items[col.id] || []).length}
-            skills={(items[col.id] || [])
-              .map((sid) => skillMap[sid])
+            key={column.id}
+            id={column.id}
+            name={column.name}
+            category={column.category}
+            isUncategorized={column.id === UNCAT}
+            count={(items[column.id] || []).length}
+            skills={(items[column.id] || [])
+              .map((skillId) => skillMap[skillId])
               .filter(Boolean)}
-            addValue={addInputs[col.id] || ""}
-            onAddChange={(v) => onAddChange(col.id, v)}
-            onAddSubmit={() => onAddSubmit(col.id)}
+            addValue={addInputs[column.id] || ""}
+            onAddChange={(value) => onAddChange(column.id, value)}
+            onAddSubmit={() => onAddSubmit(column.id)}
             onEditCategory={onEditCategory}
             onDeleteCategory={onDeleteCategory}
             onEditSkill={onEditSkill}
