@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import type { CategoryDto, SkillDto, SkillRequestDto } from "../../../@types";
 import {
   Modal,
@@ -7,6 +6,7 @@ import {
   FormActions,
   Button,
 } from "../../../components";
+import { useModalForm } from "../../../shared/useModalForm";
 
 export const SkillFormModal = ({
   open,
@@ -21,29 +21,15 @@ export const SkillFormModal = ({
   onSubmit: (data: SkillRequestDto) => void;
   onClose: () => void;
 }) => {
-  const [form, setForm] = useState<SkillRequestDto>({
-    name: "",
-    order: 0,
-    categoryId: "",
-  });
-  const nameRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (open && skill) {
-      setForm({
-        name: skill.name,
-        order: skill.order || 0,
-        categoryId: skill.categoryId || "",
-      });
-    }
-  }, [open, skill]);
-
-  useEffect(() => {
-    if (open) {
-      const timer = setTimeout(() => nameRef.current?.focus(), 100);
-      return () => clearTimeout(timer);
-    }
-  }, [open]);
+  const { form, setForm, focusRef } = useModalForm<SkillRequestDto>(open, () =>
+    skill
+      ? {
+          name: skill.name,
+          order: skill.order || 0,
+          categoryId: skill.categoryId || "",
+        }
+      : { name: "", order: 0, categoryId: "" }
+  );
 
   return (
     <Modal open={open} onClose={onClose} title="스킬 수정">
@@ -55,7 +41,7 @@ export const SkillFormModal = ({
       >
         <FormField label="스킬 이름" required>
           <input
-            ref={nameRef}
+            ref={focusRef}
             type="text"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
