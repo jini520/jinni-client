@@ -6,7 +6,7 @@ import type {
   BusinessRequestDto,
   CareerProjectDto,
   CareerProjectRequestDto,
-} from '../@types';
+} from '@/types';
 
 // Careers API
 export const careersApi = {

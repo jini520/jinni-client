@@ -6,7 +6,7 @@ import type {
   CertificationRequestDto,
   AwardDto,
   AwardRequestDto,
-} from '../@types';
+} from '@/types';
 
 // Certifications API
 export const certificationsApi = {

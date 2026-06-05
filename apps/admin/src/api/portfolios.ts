@@ -1,5 +1,5 @@
 import axiosInstance from './axios-instance';
-import type { ApiResponse, FileListDto, FileDto } from '../@types';
+import type { ApiResponse, FileListDto, FileDto } from '@/types';
 
 // Portfolios API
 export const portfoliosApi = {
