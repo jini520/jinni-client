@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import site.jejinni.server.domain.entity.file.File;
 import site.jejinni.server.dto.file.FileDto;
 import site.jejinni.server.dto.file.FileListDto;
+import site.jejinni.server.exception.BadRequestException;
 import site.jejinni.server.repository.file.FileRepository;
 
 import java.util.List;
@@ -215,7 +216,7 @@ public class FileService {
       case RESUME -> "/api/resumes/download/" + id;
       case PORTFOLIO -> "/api/portfolios/download/" + id;
       case IMAGE, DOCUMENT ->
-        throw new IllegalArgumentException("IMAGE와 DOCUMENT 타입은 지원하지 않습니다. RESUME 또는 PORTFOLIO 타입을 사용하세요.");
+        throw new BadRequestException("IMAGE와 DOCUMENT 타입은 지원하지 않습니다. RESUME 또는 PORTFOLIO 타입을 사용하세요.");
     };
   }
 

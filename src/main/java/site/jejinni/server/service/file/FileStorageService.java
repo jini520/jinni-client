@@ -5,6 +5,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import site.jejinni.server.exception.BadRequestException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -98,7 +99,7 @@ public class FileStorageService {
   private Path getStorageLocation(FileType fileType) {
     Path location = fileStorageLocations.get(fileType);
     if (location == null) {
-      throw new IllegalArgumentException("지원하지 않는 파일 타입입니다: " + fileType);
+      throw new BadRequestException("지원하지 않는 파일 타입입니다: " + fileType);
     }
     return location;
   }
@@ -109,7 +110,7 @@ public class FileStorageService {
 
   public FileInfo storeFile(MultipartFile file, FileType fileType, UUID fileId) {
     if (file.isEmpty()) {
-      throw new IllegalArgumentException("업로드할 파일이 비어있습니다.");
+      throw new BadRequestException("업로드할 파일이 비어있습니다.");
     }
 
     String originalFilename = file.getOriginalFilename();
@@ -141,7 +142,7 @@ public class FileStorageService {
    */
   public FileInfo storeImageInProjectDir(MultipartFile file, UUID projectId) {
     if (file.isEmpty()) {
-      throw new IllegalArgumentException("업로드할 파일이 비어있습니다.");
+      throw new BadRequestException("업로드할 파일이 비어있습니다.");
     }
 
     String originalFilename = file.getOriginalFilename();
@@ -281,7 +282,7 @@ public class FileStorageService {
 
   public FileInfo updateFile(UUID oldId, MultipartFile newFile, FileType fileType) {
     if (newFile.isEmpty()) {
-      throw new IllegalArgumentException("업로드할 파일이 비어있습니다.");
+      throw new BadRequestException("업로드할 파일이 비어있습니다.");
     }
 
     if (oldId != null) {
