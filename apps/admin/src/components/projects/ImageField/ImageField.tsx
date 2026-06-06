@@ -1,6 +1,6 @@
 import { useRef, type ChangeEvent } from "react";
 import { FormField, Button } from "@/components/common";
-import styles from "./project-form.module.scss";
+import styles from "./image-field.module.scss";
 
 // 상세 페이지(useProjectDetail)가 주입하는 콘텐츠 이미지 처리 핸들러.
 // upload/remove는 갱신된 URL 목록을 돌려주고(실패 시 null), 모달이 폼에 반영한다.
