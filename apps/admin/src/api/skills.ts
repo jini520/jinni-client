@@ -6,7 +6,7 @@ import type {
   SkillDto,
   SkillRequestDto,
   SkillsDto,
-} from '../@types';
+} from '@/types';
 
 // Skills API
 export const skillsApi = {

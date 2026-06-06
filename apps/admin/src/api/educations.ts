@@ -1,5 +1,5 @@
 import axiosInstance from "./axios-instance";
-import type { ApiResponse, EducationDto, EducationRequestDto } from "../@types";
+import type { ApiResponse, EducationDto, EducationRequestDto } from "@/types";
 
 // Educations API
 export const educationsApi = {

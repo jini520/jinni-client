@@ -4,7 +4,7 @@ import type {
   ProjectListDto,
   ProjectDetailDto,
   ProjectRequestDto,
-} from '../@types';
+} from '@/types';
 
 // Projects API
 export const projectsApi = {
