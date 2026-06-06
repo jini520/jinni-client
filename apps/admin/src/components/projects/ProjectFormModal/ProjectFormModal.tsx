@@ -11,11 +11,11 @@ import {
 } from "@/components/common";
 import { useModalForm } from "@/hooks/useModalForm";
 import { useSortableSensors } from "@/hooks/useSortableSensors";
-import { ProjectScalarFields } from "./ProjectScalarFields";
-import { ArrayFieldEditor } from "./ArrayFieldEditor";
-import { PairFieldEditor } from "./PairFieldEditor";
-import { SkillTagsField } from "./SkillTagsField";
-import { ImageField, type ProjectImageHandlers } from "./ImageField";
+import { ProjectScalarFields } from "../ProjectScalarFields";
+import { ArrayFieldEditor } from "../ArrayFieldEditor";
+import { PairFieldEditor } from "../PairFieldEditor";
+import { SkillTagsField } from "../SkillTagsField";
+import { ImageField, type ProjectImageHandlers } from "../ImageField";
 import styles from "./project-form.module.scss";
 import "@uiw/react-md-editor/markdown-editor.css";
 

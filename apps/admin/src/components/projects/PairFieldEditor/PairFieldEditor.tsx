@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { FormField, Button } from "@/components/common";
-import styles from "./project-form.module.scss";
+import styles from "./pair-field-editor.module.scss";
 
 // 2개 입력 + 추가 버튼 + 항목 리스트 (주요 기능: 이름/설명, 링크: 라벨/URL 공용).
 // 첫 입력은 필수, 둘째는 requireBoth일 때만 필수.

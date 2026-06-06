@@ -11,7 +11,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { FormField, Button, SortableTag } from "@/components/common";
-import styles from "./project-form.module.scss";
+import styles from "./skill-tags-field.module.scss";
 
 // 스킬 입력(중복 방지는 onAdd에서) + 드래그로 순서 변경 가능한 태그 목록
 export const SkillTagsField = ({

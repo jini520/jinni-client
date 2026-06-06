@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FormField, Button } from "@/components/common";
-import styles from "./project-form.module.scss";
+import styles from "./array-field-editor.module.scss";
 
 // 단일 텍스트 입력 + Enter/버튼 추가 + 삭제 가능한 항목 리스트 (하이라이트·담당역할 공용)
 export const ArrayFieldEditor = ({
