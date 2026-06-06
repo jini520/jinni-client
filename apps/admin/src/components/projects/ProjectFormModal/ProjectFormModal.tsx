@@ -15,6 +15,7 @@ import { ProjectScalarFields } from "./ProjectScalarFields";
 import { ArrayFieldEditor } from "./ArrayFieldEditor";
 import { PairFieldEditor } from "./PairFieldEditor";
 import { SkillTagsField } from "./SkillTagsField";
+import { ImageField, type ProjectImageHandlers } from "./ImageField";
 import styles from "./project-form.module.scss";
 import "@uiw/react-md-editor/markdown-editor.css";
 
@@ -23,12 +24,14 @@ export const ProjectFormModal = ({
   open,
   title,
   initial,
+  images,
   onSubmit,
   onClose,
 }: {
   open: boolean;
   title: string;
   initial: ProjectRequestDto;
+  images?: ProjectImageHandlers;
   onSubmit: (form: ProjectRequestDto) => void;
   onClose: () => void;
 }) => {
@@ -155,6 +158,16 @@ export const ProjectFormModal = ({
             }
           />
         </FormField>
+
+        {images && (
+          <ImageField
+            urls={form.contentImageUrls ?? []}
+            setUrls={(next) =>
+              setForm((prev) => ({ ...prev, contentImageUrls: next }))
+            }
+            handlers={images}
+          />
+        )}
 
         <FormField label="내용 (Markdown)">
           <div data-color-mode={themeMode} className="md-editor-wrapper">
