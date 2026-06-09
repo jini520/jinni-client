@@ -1,51 +1,39 @@
-# Client Frontend (Next.js) 프로덕션용 Dockerfile - main 브랜치 사용
+# Client (Next.js SSR) 프로덕션 Dockerfile
+# 빌드 컨텍스트: 모노레포 루트 (docker build -f apps/next/Dockerfile .)
 FROM node:20-alpine AS builder
 
-# Git 설치 (브랜치 체크아웃용)
-RUN apk add --no-cache git
+RUN corepack enable && corepack prepare pnpm@10.14.0 --activate
 
 WORKDIR /app
 
-# Git 저장소에서 main 브랜치 체크아웃
-ARG GIT_BRANCH=main
+# 의존성 메타 먼저 복사 (캐시 활용)
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/types/package.json ./packages/types/
+COPY packages/ui/package.json ./packages/ui/
+COPY packages/common/package.json ./packages/common/
+COPY apps/next/package.json ./apps/next/
 
-# package.json과 pnpm-lock.yaml 먼저 복사 (의존성 캐시 활용)
-COPY package.json pnpm-lock.yaml* ./
+RUN pnpm install --frozen-lockfile
 
-# pnpm 설치 및 의존성 설치
-RUN corepack enable && corepack prepare pnpm@latest --activate
-RUN pnpm install
+# 소스 복사
+COPY packages/types ./packages/types
+COPY packages/ui ./packages/ui
+COPY packages/common ./packages/common
+COPY apps/next ./apps/next
 
-# 소스 코드 복사 및 main 브랜치 체크아웃
-COPY . .
-RUN git checkout ${GIT_BRANCH} || echo "Branch ${GIT_BRANCH} already checked out or not a git repo"
+# 빌드 (해당 앱만)
+RUN pnpm --filter @jinni/next build
 
-# 빌드 수행
-RUN pnpm run build
-
-# 실행 단계
+# ── 실행 단계 (next start, SSR) ──
 FROM node:20-alpine
 
-WORKDIR /app
+RUN corepack enable && corepack prepare pnpm@10.14.0 --activate
 
-# pnpm 설치
-RUN corepack enable && corepack prepare pnpm@latest --activate
+WORKDIR /app/apps/next
 
-# package.json 복사 (의존성 설치용)
-COPY package.json pnpm-lock.yaml* ./
+# standalone 미사용이라 node_modules/.next/public/설정/워크스페이스가 모두 필요 → /app 통째로 복사
+COPY --from=builder /app /app
 
-# 프로덕션 의존성만 설치
-RUN pnpm install --prod
-
-# 빌드된 파일 복사
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.js* ./next.config.js*
-COPY --from=builder /app/next.config.ts* ./next.config.ts*
-
-# 포트 노출
 EXPOSE 3000
 
-# 프로덕션 서버 실행
 CMD ["pnpm", "start"]
-
