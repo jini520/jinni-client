@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- jejinni.site favicon — 슬래시+닷(섹션 태그 모티프) × 오로라 글로우 -->
+  <defs>
+    <linearGradient id="aurora" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF3D9A"/>
+      <stop offset="1" stop-color="#9B5CFF"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0b0a14"/>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="13.5" fill="none" stroke="rgba(255,255,255,0.08)"/>
+  <!-- 글로우 레이어 -->
+  <g filter="url(#glow)" opacity="0.7">
+    <path d="M37.5 14 L44 14 L27.5 47 L21 47 Z" fill="url(#aurora)"/>
+    <circle cx="41.5" cy="42.5" r="5" fill="#FF3D9A"/>
+  </g>
+  <!-- 본체 -->
+  <path d="M37.5 14 L44 14 L27.5 47 L21 47 Z" fill="url(#aurora)"/>
+  <circle cx="41.5" cy="42.5" r="5" fill="#FF3D9A"/>
+</svg>
