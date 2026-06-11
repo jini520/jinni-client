@@ -1,4 +1,4 @@
-import { Edu } from "@/api/edu.types";
+import { Edu } from "@jinni/types";
 
 export const mockEdu: Edu[] = [
   {

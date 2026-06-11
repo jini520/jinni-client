@@ -1,4 +1,4 @@
-import { Project, ProjectDetail } from "@/api/projects.types";
+import { Project, ProjectDetail } from "@jinni/types";
 
 export const mockProjects: Project[] = [
   {

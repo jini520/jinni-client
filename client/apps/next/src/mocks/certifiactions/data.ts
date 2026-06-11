@@ -1,4 +1,4 @@
-import { Certifications } from "@/api/certifications.types";
+import { Certifications } from "@jinni/types";
 
 export const mockCertifications: Certifications = {
   certifications: [
