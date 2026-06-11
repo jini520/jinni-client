@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.jejinni.server.global.entity.BaseEntity;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -23,11 +24,11 @@ public class Education extends BaseEntity {
 	@Column(name = "education", nullable = false, length = 200)
 	private String education;
 
-	@Column(name = "start_date", nullable = false, length = 10)
-	private String startDate;
+	@Column(name = "start_date", nullable = false)
+	private LocalDate startDate;
 
-	@Column(name = "end_date", nullable = false, length = 10)
-	private String endDate;
+	@Column(name = "end_date", nullable = false)
+	private LocalDate endDate;
 
 	@Column(name = "status", nullable = false, length = 50)
 	private String status;
@@ -39,7 +40,7 @@ public class Education extends BaseEntity {
 	private Integer orderIndex;
 
 	@Builder
-	public Education(String education, String startDate, String endDate, String status, String description, Integer orderIndex) {
+	public Education(String education, LocalDate startDate, LocalDate endDate, String status, String description, Integer orderIndex) {
 		this.education = education;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -52,11 +53,11 @@ public class Education extends BaseEntity {
 		this.education = education;
 	}
 
-	public void updateStartDate(String startDate) {
+	public void updateStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
-	public void updateEndDate(String endDate) {
+	public void updateEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 

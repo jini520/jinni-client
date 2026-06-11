@@ -2,7 +2,7 @@
 export interface CertificationDto {
   id: string;
   name: string;
-  date: string; // "YY.MM." 형식
+  date: string; // "YYYY-MM-DD" 형식
   organization?: string;
   tier?: string;
   orderIndex?: number;
@@ -10,7 +10,7 @@ export interface CertificationDto {
 
 export interface CertificationRequestDto {
   name: string;
-  date: string; // "YY.MM." 형식
+  date: string; // "YYYY-MM-DD" 형식
   organization?: string;
   tier?: string;
   orderIndex?: number;
@@ -20,7 +20,7 @@ export interface CertificationRequestDto {
 export interface AwardDto {
   id: string;
   name: string;
-  date: string; // "YY.MM." 형식
+  date: string; // "YYYY-MM-DD" 형식
   organization?: string;
   tier?: string;
   orderIndex?: number;
@@ -28,7 +28,7 @@ export interface AwardDto {
 
 export interface AwardRequestDto {
   name: string;
-  date: string; // "YY.MM." 형식
+  date: string; // "YYYY-MM-DD" 형식
   organization?: string;
   tier?: string;
   orderIndex?: number;

@@ -4,8 +4,8 @@ export const mockCareers: Careers = {
   businesses: [
     {
       id: "ff3bd3e2-a374-4213-9c5b-1f34aa056ca2",
-      startDate: "24.06.",
-      endDate: "25.02.",
+      startDate: "2024-06-01",
+      endDate: "2025-02-01",
       company: "Connecting Point",
       department: "스타트업",
       position: "Frontend Developer",
@@ -27,8 +27,8 @@ export const mockCareers: Careers = {
     },
     {
       id: "028125c3-c489-45fb-940b-560a4215da49",
-      startDate: "23.08.",
-      endDate: "24.05.",
+      startDate: "2023-08-01",
+      endDate: "2024-05-01",
       company: "Fasoo",
       department: "개발센터",
       position: "개발 센터, Frontend Developer",
@@ -44,8 +44,8 @@ export const mockCareers: Careers = {
   projects: [
     {
       id: "55f4b952-a7a4-4b90-9f09-da151f461ce9",
-      startDate: "22.04.",
-      endDate: "22.05.",
+      startDate: "2022-04-01",
+      endDate: "2022-05-01",
       company: "Tooliv",
       department: "삼성 청년 SW 아카데미",
       position: "Frontend Developer",

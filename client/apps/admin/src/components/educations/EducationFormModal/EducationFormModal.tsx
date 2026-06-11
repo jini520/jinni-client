@@ -8,7 +8,6 @@ import {
   Button,
 } from "@/components/common";
 import { useModalForm } from "@/hooks/useModalForm";
-import { formatDateInput } from "@/utils/formatDateInput";
 
 interface EducationItem {
   education: string;
@@ -79,30 +78,24 @@ export const EducationFormModal = ({
         </FormField>
 
         <FormRow>
-          <FormField label="시작일 (YY.MM.)" required>
+          <FormField label="시작일" required>
             <input
-              type="text"
+              type="date"
               value={form.startDate}
               onChange={(e) =>
-                setForm({
-                  ...form,
-                  startDate: formatDateInput(e.target.value),
-                })
+                setForm({ ...form, startDate: e.target.value })
               }
-              placeholder="24.01."
-              pattern="\d{2}\.\d{2}\."
               required
             />
           </FormField>
-          <FormField label="종료일 (YY.MM.)">
+          <FormField label="종료일" required>
             <input
-              type="text"
+              type="date"
               value={form.endDate}
               onChange={(e) =>
-                setForm({ ...form, endDate: formatDateInput(e.target.value) })
+                setForm({ ...form, endDate: e.target.value })
               }
-              placeholder="24.12. (비워두면 현재)"
-              pattern="\d{2}\.\d{2}\."
+              required
             />
           </FormField>
         </FormRow>

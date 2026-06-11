@@ -8,7 +8,6 @@ import {
   Button,
 } from "@/components/common";
 import { useModalForm } from "@/hooks/useModalForm";
-import { formatDateInput } from "@/utils/formatDateInput";
 
 interface CertItem {
   id: string;
@@ -38,7 +37,7 @@ const LABELS: Record<
     edit: "자격증 수정",
     name: "자격증명",
     namePlaceholder: "자격증명 입력",
-    date: "취득일 (YY.MM.)",
+    date: "취득일",
     tierPlaceholder: "1급, 2급 등",
     org: "발급 기관",
     orgPlaceholder: "발급 기관명 입력",
@@ -48,7 +47,7 @@ const LABELS: Record<
     edit: "수상 내역 수정",
     name: "수상명",
     namePlaceholder: "수상명 입력",
-    date: "수상일 (YY.MM.)",
+    date: "수상일",
     tierPlaceholder: "금상, 은상 등",
     org: "주최 기관",
     orgPlaceholder: "주최 기관명 입력",
@@ -115,13 +114,11 @@ export const CertificationFormModal = ({
         <FormRow>
           <FormField label={labels.date} required>
             <input
-              type="text"
+              type="date"
               value={form.date}
               onChange={(e) =>
-                setForm({ ...form, date: formatDateInput(e.target.value) })
+                setForm({ ...form, date: e.target.value })
               }
-              placeholder="24.01."
-              pattern="\d{2}\.\d{2}\."
               required
             />
           </FormField>

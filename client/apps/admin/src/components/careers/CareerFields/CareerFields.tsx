@@ -1,6 +1,5 @@
 import { forwardRef } from "react";
 import { FormRow, FormField } from "@/components/common";
-import { formatDateInput } from "@/utils/formatDateInput";
 
 export interface CareerFieldsValue {
   company: string;
@@ -40,23 +39,19 @@ export const CareerFields = forwardRef<
     </FormRow>
 
     <FormRow>
-      <FormField label="시작일 (YY.MM.)" required>
+      <FormField label="시작일" required>
         <input
-          type="text"
+          type="date"
           value={value.startDate}
-          onChange={(e) => onChange({ startDate: formatDateInput(e.target.value) })}
-          placeholder="24.01."
-          pattern="\d{2}\.\d{2}\."
+          onChange={(e) => onChange({ startDate: e.target.value })}
           required
         />
       </FormField>
-      <FormField label="종료일 (YY.MM.)">
+      <FormField label="종료일 (비워두면 현재)">
         <input
-          type="text"
+          type="date"
           value={value.endDate ?? ""}
-          onChange={(e) => onChange({ endDate: formatDateInput(e.target.value) })}
-          placeholder="24.12. (비워두면 현재)"
-          pattern="\d{2}\.\d{2}\."
+          onChange={(e) => onChange({ endDate: e.target.value })}
         />
       </FormField>
     </FormRow>

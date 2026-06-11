@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -13,8 +14,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public abstract class CareerDto {
 	private UUID id;
-	private String startDate;  // "YY.MM." 형식
-	private String endDate;    // "YY.MM." 형식
+	private LocalDate startDate;
+	private LocalDate endDate;
 	private String company;
 	private String department;
 	private String position;

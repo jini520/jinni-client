@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.jejinni.server.domain.education.entity.Education;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -15,8 +16,8 @@ import java.util.UUID;
 public class EducationDto {
 	private UUID id;
 	private String education;
-	private String startDate;  // "YY.MM." 형식
-	private String endDate;    // "YY.MM." 형식
+	private LocalDate startDate;
+	private LocalDate endDate;
 	private String status;
 	private String description;
 

@@ -8,6 +8,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import site.jejinni.server.global.entity.BaseEntity;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -23,11 +24,11 @@ public abstract class Career extends BaseEntity {
 	@Column(name = "career_id", columnDefinition = "UUID")
 	private UUID id;
 
-	@Column(name = "start_date", nullable = false, length = 10)
-	private String startDate;
+	@Column(name = "start_date", nullable = false)
+	private LocalDate startDate;
 
-	@Column(name = "end_date", length = 10)
-	private String endDate;
+	@Column(name = "end_date")
+	private LocalDate endDate;
 
 	@Column(name = "company", nullable = false, length = 200)
 	private String company;
@@ -45,7 +46,7 @@ public abstract class Career extends BaseEntity {
 	@Column(name = "order_index", nullable = false)
 	private Integer orderIndex;
 
-	protected Career(String startDate, String endDate, String company,
+	protected Career(LocalDate startDate, LocalDate endDate, String company,
 	                 String department, String position, String[] skills, Integer orderIndex) {
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -57,7 +58,7 @@ public abstract class Career extends BaseEntity {
 	}
 
 	// 업데이트 메서드들
-	public void updateDates(String startDate, String endDate) {
+	public void updateDates(LocalDate startDate, LocalDate endDate) {
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
+
+import java.time.LocalDate;
 import org.hibernate.type.SqlTypes;
 
 @Entity
@@ -20,7 +22,7 @@ public class Business extends Career {
 	private String[] details;
 
 	@Builder
-	public Business(String startDate, String endDate, String company,
+	public Business(LocalDate startDate, LocalDate endDate, String company,
 	                String department, String position, String[] skills,
 	                Integer orderIndex, String[] details) {
 		super(startDate, endDate, company, department, position, skills, orderIndex);

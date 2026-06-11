@@ -42,7 +42,7 @@ export interface Skills {
 // ── careers.types ──────────────────────────────────────────────────────────
 export interface CareerBase {
   id: string;
-  startDate: string;
+  startDate: string;          // ISO date "2024-06-01"
   endDate: string;
   company: string;
   department: string;
@@ -109,7 +109,7 @@ export interface ProjectDetail {
 export interface Certification {
   id: string;
   name: string;
-  date: string;
+  date: string;               // ISO date "2024-06-01"
   organization: string;
   tier: string;
 }
@@ -131,7 +131,7 @@ export interface Certifications {
 export interface Edu {
   id: string;
   education: string;
-  startDate: string;
+  startDate: string;          // ISO date "2024-06-01"
   endDate: string;
   status: string;
   description: string;

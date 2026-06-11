@@ -2,8 +2,8 @@
 export interface EducationDto {
   id: string;
   education: string;
-  startDate: string; // "YY.MM." 형식
-  endDate: string; // "YY.MM." 형식
+  startDate: string; // "YYYY-MM-DD" 형식
+  endDate: string; // "YYYY-MM-DD" 형식
   status: string;
   description?: string;
   orderIndex?: number;

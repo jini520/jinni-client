@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "career_projects")
 @DiscriminatorValue("PROJECT")
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class CareerProject extends Career {
 
 	@Builder
-	public CareerProject(String startDate, String endDate, String company,
+	public CareerProject(LocalDate startDate, LocalDate endDate, String company,
 	                     String department, String position, String[] skills,
 	                     Integer orderIndex) {
 		super(startDate, endDate, company, department, position, skills, orderIndex);

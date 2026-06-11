@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.jejinni.server.domain.achievement.entity.Certification;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -15,7 +16,7 @@ import java.util.UUID;
 public class CertificationDto {
 	private UUID id;
 	private String name;
-	private String date;  // "YY.MM." 형식
+	private LocalDate date;
 	private String organization;
 	private String tier;
 
