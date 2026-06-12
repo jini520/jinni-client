@@ -1,16 +1,84 @@
 @use '@jinni/ui/scss/mixins/responsive' as rsp;
+@use '../../styles/section-base' as base;
 
 .foot {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 32px 0 56px;
-  border-top: 1px solid var(--line);
   margin-top: 64px;
+  border-top: 1px solid var(--line);
+  padding: 48px 0 56px;
+  display: grid;
+  grid-template-areas:
+    'meta  tag'
+    'meta  links';
+  grid-template-columns: 1fr minmax(0, 400px);
+  grid-template-rows: auto 1fr;
+  gap: 12px 32px;
+
+  @include rsp.max-width(800px) {
+    grid-template-areas:
+      'tag'
+      'links'
+      'meta';
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    gap: 24px;
+  }
+}
+
+.contactTag {
+  grid-area: tag;
+  @include base.sheadTag;
+}
+
+.contactLinks {
+  grid-area: links;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.contactLink {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: transform 0.25s, background 0.25s, border-color 0.25s;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    transform: translateY(-3px);
+    background: var(--surface-3);
+    border-color: var(--a1);
+  }
+}
+
+.lbl {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+.hdl { font-size: 12.5px; font-weight: 500; }
+
+.meta {
+  grid-area: meta;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   font-size: 11px;
   color: var(--fg-faint);
   font-family: var(--f-mono);
   letter-spacing: 0.06em;
 
-  @include rsp.max-width(600px) { flex-direction: column; gap: 8px; }
+  @include rsp.max-width(800px) { text-align: center; }
 }

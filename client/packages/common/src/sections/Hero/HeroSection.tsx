@@ -16,7 +16,7 @@ export function HeroSection() {
             <span className={styles.name}>{PROFILE.nameKo}</span>입니다.
           </span>
           <span className={styles.h1En} data-reveal data-delay="4">
-            {PROFILE.nameEn},
+            {PROFILE.nameEn} — {PROFILE.role}
           </span>
         </h1>
       </div>

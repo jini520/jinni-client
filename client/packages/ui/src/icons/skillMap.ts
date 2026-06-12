@@ -5,7 +5,7 @@ import {
   StyledComponentsIcon, JestIcon, StorybookIcon, ViteIcon, DockerIcon,
   GithubIcon, GitlabIcon, JiraIcon, FigmaIcon, NotionIcon, LinuxIcon,
   OracleIcon, SolidityIcon, ElectronIcon, SpringbootIcon, NginxIcon,
-  PostgresqlIcon,
+  PostgresqlIcon, CursorIcon, ClaudeCodeIcon,
 } from './logos';
 
 export type SvgIcon = ComponentType<SVGProps<SVGSVGElement>>;
@@ -43,6 +43,8 @@ export const SKILL_ICONS = {
   springboot: SpringbootIcon,
   nginx: NginxIcon,
   postgresql: PostgresqlIcon,
+  cursor: CursorIcon,
+  claudecode: ClaudeCodeIcon,
 } satisfies Record<string, SvgIcon>;
 
 export type SkillName = keyof typeof SKILL_ICONS;

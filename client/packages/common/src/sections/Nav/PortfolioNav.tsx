@@ -10,7 +10,6 @@ const navLinks = [
   { label: 'Work',    href: '#work' },
   { label: 'Career',  href: '#career' },
   { label: 'Writing', href: '#writing' },
-  { label: 'Contact', href: '#contact' },
 ];
 
 const sectionIds = navLinks.map((l) => l.href.slice(1));

@@ -1,3 +1,5 @@
+export { default as ClaudeCodeIcon } from "./claude-code";
+export { default as CursorIcon } from "./cursor";
 export { default as DockerIcon } from "./docker";
 export { default as ElectronIcon } from "./electron";
 export { default as FigmaIcon } from "./figma";

@@ -9,7 +9,6 @@ import { StackSection } from './sections/Stack/StackSection';
 import { ProjectsSection } from './sections/Projects/ProjectsSection';
 import { CareerSection } from './sections/Career/CareerSection';
 import { WritingSection } from './sections/Writing/WritingSection';
-import { ContactSection } from './sections/Contact/ContactSection';
 import { Footer } from './sections/Footer/Footer';
 import styles from './PortfolioPage.module.scss';
 
@@ -37,7 +36,6 @@ export function PortfolioPage({ data, onProjectClick, renderLink, apiUrl }: Port
         <ProjectsSection projects={projects} onProjectClick={onProjectClick} />
         <CareerSection careers={careers} />
         <WritingSection posts={posts} />
-        <ContactSection />
         <Footer />
       </main>
     </>

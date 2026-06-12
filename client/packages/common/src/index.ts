@@ -10,7 +10,6 @@ export { StackSection } from './sections/Stack/StackSection';
 export { ProjectsSection } from './sections/Projects/ProjectsSection';
 export { CareerSection } from './sections/Career/CareerSection';
 export { WritingSection } from './sections/Writing/WritingSection';
-export { ContactSection } from './sections/Contact/ContactSection';
 export { Footer } from './sections/Footer/Footer';
 export { PortfolioNav } from './sections/Nav/PortfolioNav';
 
