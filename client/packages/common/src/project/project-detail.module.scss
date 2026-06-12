@@ -25,8 +25,7 @@
   position: fixed;
   inset: 0;
   z-index: 2000;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   animation: pmOverlayIn 0.3s ease;
 
   // mobile: 페이지처럼 — 오버레이 없음
@@ -65,26 +64,33 @@
   flex-direction: column;
   animation: pmModalIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 
+  // 스크롤은 카드 내부에서 — 카드는 뷰포트에 고정
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
   // mobile: 풀 페이지
   border: none;
   border-radius: 0;
-  min-height: 100vh;
+  height: 100dvh;
   box-shadow: none;
 
   @media (min-width: 768px) {
     border: 1px solid var(--pm-line2);
     border-radius: 22px;
-    min-height: auto;
+    height: auto;
+    max-height: calc(100dvh - 2 * clamp(16px, 3vw, 40px));
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
   }
 
+  // 상단 액센트 라인 — 내부 스크롤을 따라가지 않도록 sticky
   &::before {
     content: '';
-    position: absolute;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
+    z-index: 11;
+    flex-shrink: 0;
     height: 2px;
+    margin-bottom: -2px;
     background: var(--c);
     opacity: 0.9;
   }
@@ -102,7 +108,12 @@
   display: flex;
   justify-content: flex-end;
   padding: 16px 16px 0;
-  background: var(--pm-bg);
+  // 배경 투명 — 스크롤 시 띠가 콘텐츠를 가리지 않도록. 클릭도 버튼에만 잡히게.
+  pointer-events: none;
+}
+
+.closeRow .close {
+  pointer-events: auto;
 }
 
 .close {

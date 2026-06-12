@@ -147,10 +147,10 @@ export function ProjectModal({ project: p, accent, dark, idx, onClose }: Props) 
           {/* FOOT */}
           {p.links && p.links.length > 0 && (
             <div className={styles.foot}>
-              {p.links.map((l, i) => (
+              {p.links.map((l) => (
                 <a
                   key={l.label}
-                  className={`${styles.link}${i === 0 ? ` ${styles.linkPrimary}` : ''}`}
+                  className={styles.link}
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
