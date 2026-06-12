@@ -26,6 +26,7 @@ export * from './theme';
 export { useReveal }         from './hooks/useReveal';
 export { useMouse }          from './hooks/useMouse';
 export { useScrollProgress } from './hooks/useScrollProgress';
+export { useScrollSpy }      from './hooks/useScrollSpy';
 
 // ── Utils ────────────────────────────────────────────────────────────────────
 export { formatYearMonth, formatPeriod, calcMonths, STATUS_LABELS } from './utils/project';

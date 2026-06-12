@@ -74,6 +74,7 @@ function AppContent() {
               navigate(`/projects/${id}`, { state: { accent, idx } })
             }
             renderLink={(href, children) => <a href={href}>{children}</a>}
+            apiUrl={import.meta.env.VITE_API_URL}
           />
         )}
       </Theme>

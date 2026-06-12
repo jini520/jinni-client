@@ -19,6 +19,7 @@ export function PortfolioClient({ data }: Props) {
           data={data}
           onProjectClick={(id) => router.push(`/projects/${id}`, { scroll: false })}
           renderLink={(href, children) => <a href={href}>{children}</a>}
+          apiUrl={process.env.NEXT_PUBLIC_API_URL ?? 'https://jejinni.site'}
         />
       </Theme>
     </ThemeProvider>

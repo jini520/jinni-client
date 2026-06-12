@@ -17,9 +17,10 @@ export interface PortfolioPageProps {
   data: PortfolioData;
   onProjectClick: (id: string, accent: string, idx: string) => void;
   renderLink?: (href: string, children: React.ReactNode) => React.ReactNode;
+  apiUrl?: string;
 }
 
-export function PortfolioPage({ data, onProjectClick, renderLink }: PortfolioPageProps) {
+export function PortfolioPage({ data, onProjectClick, renderLink, apiUrl }: PortfolioPageProps) {
   useReveal();
 
   const { skills, careers, projects, posts } = data;
@@ -27,7 +28,7 @@ export function PortfolioPage({ data, onProjectClick, renderLink }: PortfolioPag
   return (
     <>
       <ProgressBar accent="var(--a1)" />
-      <PortfolioNav renderLink={renderLink} />
+      <PortfolioNav renderLink={renderLink} apiUrl={apiUrl} />
 
       <main className={styles.main}>
         <HeroSection />

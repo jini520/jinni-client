@@ -16,9 +16,10 @@ export interface NavProps {
   onToggleTheme?: () => void;
   renderLink?: (href: string, children: React.ReactNode) => React.ReactNode;
   className?: string;
+  activeHref?: string;
 }
 
-export function Nav({ links, brand, cta, theme = 'dark', onToggleTheme, renderLink, className }: NavProps) {
+export function Nav({ links, brand, cta, theme = 'dark', onToggleTheme, renderLink, className, activeHref }: NavProps) {
   const linkEl = (href: string, children: React.ReactNode) =>
     renderLink ? renderLink(href, children) : <a href={href}>{children}</a>;
 
@@ -38,7 +39,7 @@ export function Nav({ links, brand, cta, theme = 'dark', onToggleTheme, renderLi
         <ul className={styles.links}>
           {links.map((l) => (
             <li key={l.href}>
-              {linkEl(l.href, <span className={styles.link}>{l.label}</span>)}
+              {linkEl(l.href, <span className={styles.link} data-active={l.href === activeHref}>{l.label}</span>)}
             </li>
           ))}
         </ul>
